@@ -68,45 +68,40 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     );
     // show window
     ShowWindow(hWnd, SW_SHOWDEFAULT);
+    pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 CustomWindow::~CustomWindow() {
     DestroyWindow(hWnd);
 }
 
+void CustomWindow::SetTitle(const std::string& title) {
+    SetWindowText(hWnd, title.c_str());
+}
 
-const void CustomWindow::loop(){
-    // Run the message loop.
+std::optional<int> CustomWindow::ProcessMessages() {
+    MSG msg;
+    // while queue has messages, remove and dispatch them (but do not block on empty queue)
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+        // check for quit because peekmessage does not signal this via return val
+        if (msg.message == WM_QUIT) {
+            // return optional wrapping int (arg to PostQuitMessage is in wparam) signals quit
+            return msg.wParam;
+        }
 
-    MSG msg = { };
-    while (GetMessage(&msg, NULL, 0, 0)) {
+        // TranslateMessage will post auxiliary WM_CHAR messages from key msgs
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-
-        Mouse::Event e = mouse.Read();
-
-        if (kbd.KeyIsPressed(VK_MENU))
-        {
-            MessageBox(nullptr, "Something Happened!", "Space Key Was Pressed", MB_OK | MB_ICONEXCLAMATION);
-        }
-
-        if (mouse.LeftIsPressed()) {
-            std::ostringstream oss;
-
-            oss << "(" << mouse.GetPosX() << ", " << mouse.GetPosY() << ")" << std::endl;
-
-            OutputDebugString(oss.str().c_str());
-        }
-
-        if (e.GetType() == Mouse::Event::Type::Move) {
-            std::ostringstream oss;
-
-            oss << "(" << mouse.GetPosX() << ", " << mouse.GetPosY() << ")" << std::endl;
-
-            OutputDebugString(oss.str().c_str());
-        }
     }
+
+    // return empty optional when not quitting app
+    return {};
 }
+
+Graphics& CustomWindow::Gfx() {
+    return *pGfx;
+}
+
 
 //Call back function
 
