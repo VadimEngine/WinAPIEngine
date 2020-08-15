@@ -28,22 +28,17 @@ CustomWindow::WindowClass::WindowClass()
     RegisterClassEx(&wc);
 }
 
-CustomWindow::WindowClass::~WindowClass()
-{
+CustomWindow::WindowClass::~WindowClass() {
     UnregisterClass(wndClassName, getInstance());
 }
 
-const char* CustomWindow::WindowClass::getName()
-{
+const char* CustomWindow::WindowClass::getName() {
     return wndClassName;
 }
 
-HINSTANCE CustomWindow::WindowClass::getInstance()
-{
+HINSTANCE CustomWindow::WindowClass::getInstance() {
     return wndClass.hInst;
 }
-
-
 //END OF WindowClass*************************************************
 
 //CustomWindow
@@ -75,13 +70,12 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     ShowWindow(hWnd, SW_SHOWDEFAULT);
 }
 
-CustomWindow::~CustomWindow()
-{
+CustomWindow::~CustomWindow() {
     DestroyWindow(hWnd);
 }
 
 
-const void CustomWindow::loop() const{
+const void CustomWindow::loop(){
     // Run the message loop.
 
     MSG msg = { };
@@ -89,9 +83,11 @@ const void CustomWindow::loop() const{
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 
+        Mouse::Event e = mouse.Read();
+
         if (kbd.KeyIsPressed(VK_MENU))
         {
-            MessageBox(nullptr, "Something Happon!", "Space Key Was Pressed", MB_OK | MB_ICONEXCLAMATION);
+            MessageBox(nullptr, "Something Happened!", "Space Key Was Pressed", MB_OK | MB_ICONEXCLAMATION);
         }
 
         if (mouse.LeftIsPressed()) {
@@ -102,40 +98,21 @@ const void CustomWindow::loop() const{
             OutputDebugString(oss.str().c_str());
         }
 
-
-        /*
-        
-        //GET_X_LPARAM(lParam);
-            POINTS pt = MAKEPOINTS(lParam);
+        if (e.GetType() == Mouse::Event::Type::Move) {
             std::ostringstream oss;
-            oss << "(" << pt.x << ", " << pt.y << ")" << std::endl;
+
+            oss << "(" << mouse.GetPosX() << ", " << mouse.GetPosY() << ")" << std::endl;
 
             OutputDebugString(oss.str().c_str());
-        
-        
-        
-        */
-
-
-        /*
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                SetPixel(theHDC, 200 + i, 200 + j, i + j);
-                std::ostringstream s;
-                s << "Loop: " << i;
-                SetWindowTextA(hwnd, s.str().c_str());
-            }
         }
-        */
     }
 }
 
-//Call back fucntion
+//Call back function
 
 LRESULT CALLBACK CustomWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     // use create parameter passed in from CreateWindow() to store window class pointer at WinAPI side
-    if (msg == WM_NCCREATE)
-    {
+    if (msg == WM_NCCREATE) {
         // extract ptr to window class from creation data
         const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
         CustomWindow* const pWnd = static_cast<CustomWindow*>(pCreate->lpCreateParams);
@@ -186,13 +163,14 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             kbd.ClearState();
             break;
         /*********** KEYBOARD MESSAGES ***********/
+        //System and non system key down
         case WM_KEYDOWN:
-        // syskey commands need to be handled to track ALT key (VK_MENU) and F10
         case WM_SYSKEYDOWN:
             if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled()) {// filter autorepeat
                 kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
             }
             break;
+        //System and non system key up
         case WM_KEYUP:
         case WM_SYSKEYUP:
             kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
@@ -201,52 +179,62 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             kbd.OnChar(static_cast<unsigned char>(wParam));
             break;
          /*********** END KEYBOARD MESSAGES ***********/
-            /************* MOUSE MESSAGES ****************/
-        case WM_MOUSEMOVE:
-        {
-            POINTS pt = MAKEPOINTS(lParam);
-            mouse.OnMouseMove(pt.x, pt.y);
+         /************* MOUSE MESSAGES ****************/
+        case WM_MOUSEMOVE: {
+            const POINTS pt = MAKEPOINTS(lParam);
+            if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height) {
+                mouse.OnMouseMove(pt.x, pt.y);
+                if (!mouse.IsInWindow()) {
+                    SetCapture(hWnd);
+                    mouse.OnMouseEnter();
+                }
+            } else {
+                // not in client -> log move / maintain capture if button down
+                if (wParam & (MK_LBUTTON | MK_RBUTTON)){
+                    mouse.OnMouseMove(pt.x, pt.y);
+                } else {
+                    // button up -> release capture / log event for leaving
+                    ReleaseCapture();
+                    mouse.OnMouseLeave();
+                }
+            }
+            break;
         }
-        case WM_LBUTTONDOWN:
-        {
+        case WM_LBUTTONDOWN: {
             const POINTS pt = MAKEPOINTS(lParam);
             mouse.OnLeftPressed(pt.x, pt.y);
             break;
         }
-        case WM_RBUTTONDOWN:
-        {
+        case WM_RBUTTONDOWN: {
             const POINTS pt = MAKEPOINTS(lParam);
             mouse.OnRightPressed(pt.x, pt.y);
             break;
         }
-        case WM_LBUTTONUP:
-        {
+        case WM_LBUTTONUP: {
             const POINTS pt = MAKEPOINTS(lParam);
             mouse.OnLeftReleased(pt.x, pt.y);
+            if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height) {
+                ReleaseCapture();
+                mouse.OnMouseLeave();
+            }
             break;
         }
-        case WM_RBUTTONUP:
-        {
+        case WM_RBUTTONUP: {
             const POINTS pt = MAKEPOINTS(lParam);
             mouse.OnRightReleased(pt.x, pt.y);
+            if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height) {
+                ReleaseCapture();
+                mouse.OnMouseLeave();
+            }
             break;
         }
-        case WM_MOUSEWHEEL:
-        {
+        case WM_MOUSEWHEEL:  {
             const POINTS pt = MAKEPOINTS(lParam);
-            if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-            {
-                mouse.OnWheelUp(pt.x, pt.y);
-            }
-            else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
-            {
-                mouse.OnWheelDown(pt.x, pt.y);
-            }
+            const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+            mouse.OnWheelDelta(pt.x, pt.y, delta);
             break;
         }
         /************** END MOUSE MESSAGES **************/
-
-
         case WM_CLOSE: {
             PostQuitMessage(0);
             return 0;

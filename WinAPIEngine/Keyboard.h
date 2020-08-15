@@ -20,8 +20,15 @@ class Keyboard {
 		bool isRelease() const;
 		bool isInvalid() const;
 		unsigned char getCode() const;
-
 	};
+
+private:
+	static constexpr unsigned int nKeys = 256u;
+	static constexpr unsigned int bufferSize = 16u;
+	bool autorepeatEnabled = false;
+	std::bitset<nKeys> keystates;
+	std::queue<Event> keybuffer;
+	std::queue<char> charbuffer;
 public:
 	Keyboard() = default;
 	Keyboard(const Keyboard&) = delete;
@@ -47,12 +54,5 @@ private:
 	void ClearState() noexcept;
 	template<typename T>
 	static void TrimBuffer(std::queue<T>& buffer) noexcept;
-private:
-	static constexpr unsigned int nKeys = 256u;
-	static constexpr unsigned int bufferSize = 16u;
-	bool autorepeatEnabled = false;
-	std::bitset<nKeys> keystates;
-	std::queue<Event> keybuffer;
-	std::queue<char> charbuffer;
 };
 

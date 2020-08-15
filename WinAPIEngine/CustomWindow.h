@@ -39,7 +39,7 @@ public:
 	CustomWindow(const CustomWindow&) = delete;
 	CustomWindow& operator=(const CustomWindow&) = delete;
 
-	const void loop() const;
+	const void loop();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
