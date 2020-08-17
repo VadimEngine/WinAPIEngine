@@ -1,7 +1,8 @@
 #pragma once
-#pragma comment(lib,"d3d11.lib")
 
 #include "CustomWinHeader.h"
+
+#pragma comment(lib,"d3d11.lib")
 #include <string>
 #include <sstream>
 #include <optional>
@@ -10,6 +11,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "GraphicsGDI.h"
+#include "Entity.h"
 
 
 
@@ -37,9 +40,15 @@ private:
 	int height;
 	HWND hWnd;
 	std::unique_ptr<Graphics> pGfx;
+	//GDIgraphics
+	std::unique_ptr<GraphicsGDI> pGDI;
+
 public:
 	Keyboard kbd;
 	Mouse mouse;
+
+
+
 public:
 	CustomWindow(int width, int height, const char* name);
 	~CustomWindow();
@@ -48,6 +57,7 @@ public:
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages();
 	Graphics& Gfx();
+	GraphicsGDI& GDIGfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

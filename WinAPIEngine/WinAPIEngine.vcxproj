@@ -144,7 +144,9 @@
     <ClCompile Include="CustomTimer.cpp" />
     <ClCompile Include="CustomWindow.cpp" />
     <ClCompile Include="Driver.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GraphicsGDI.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="WindowMessageMap.cpp" />
@@ -154,10 +156,16 @@
     <ClInclude Include="CustomTimer.h" />
     <ClInclude Include="CustomWindow.h" />
     <ClInclude Include="CustomWinHeader.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsGDI.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="WindowMessageMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WinAPIEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,35 +20,28 @@ Mouse::Event::Event(Mouse::Event::Type type, const Mouse& parent) noexcept
 	y(parent.y)
 {}
 
-bool Mouse::Event::IsValid() const noexcept
-{
+bool Mouse::Event::IsValid() const noexcept {
 	return type != Type::Invalid;
 }
 
-Mouse::Event::Type Mouse::Event::GetType() const noexcept
-{
+Mouse::Event::Type Mouse::Event::GetType() const noexcept {
 	return type;
 }
 
-std::pair<int, int> Mouse::Event::GetPos() const noexcept
-{
+std::pair<int, int> Mouse::Event::GetPos() const noexcept {
 	return{ x,y };
 }
 
-int Mouse::Event::GetPosX() const noexcept
-{
+int Mouse::Event::GetPosX() const noexcept {
 	return x;
 }
-int Mouse::Event::GetPosY() const noexcept
-{
+int Mouse::Event::GetPosY() const noexcept {
 	return y;
 }
-bool Mouse::Event::LeftIsPressed() const noexcept
-{
+bool Mouse::Event::LeftIsPressed() const noexcept {
 	return leftIsPressed;
 }
-bool Mouse::Event::RightIsPressed() const noexcept
-{
+bool Mouse::Event::RightIsPressed() const noexcept {
 	return rightIsPressed;
 }
 
@@ -155,8 +148,7 @@ void Mouse::OnWheelDown(int x, int y) noexcept {
 }
 
 void Mouse::TrimBuffer() noexcept {
-	while (buffer.size() > bufferSize)
-	{
+	while (buffer.size() > bufferSize) {
 		buffer.pop();
 	}
 }

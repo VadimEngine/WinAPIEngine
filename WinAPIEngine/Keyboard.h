@@ -6,7 +6,6 @@
 class Keyboard {
 	friend class CustomWindow;
 	class Event {
-
 	public:
 		enum class Type {
 			PRESS, RELEASE, INVALID
@@ -21,7 +20,6 @@ class Keyboard {
 		bool isInvalid() const;
 		unsigned char getCode() const;
 	};
-
 private:
 	static constexpr unsigned int nKeys = 256u;
 	static constexpr unsigned int bufferSize = 16u;

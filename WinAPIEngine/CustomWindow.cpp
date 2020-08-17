@@ -1,8 +1,12 @@
 #include "CustomWindow.h"
+#include <objidl.h>
+#include <gdiplus.h>
+
+//using namespace Gdiplus;
+#pragma comment (lib,"Gdiplus.lib")
 
 //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindowexa
-//can draw with GDI (graphics device interface)
-//https://docs.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-drawing-a-line-use
+
 
 
 //Window class*****************************************************
@@ -11,6 +15,10 @@ CustomWindow::WindowClass CustomWindow::WindowClass::wndClass;
 
 CustomWindow::WindowClass::WindowClass()
     : hInst(GetModuleHandle(nullptr)) {
+
+    ULONG_PTR gdiplusToken;
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(wc);
@@ -69,10 +77,12 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     // show window
     ShowWindow(hWnd, SW_SHOWDEFAULT);
     pGfx = std::make_unique<Graphics>(hWnd);
+    pGDI = std::make_unique<GraphicsGDI>(hWnd);
 }
 
 CustomWindow::~CustomWindow() {
     DestroyWindow(hWnd);
+    //GdiplusShutdown(gdiplusToken);
 }
 
 void CustomWindow::SetTitle(const std::string& title) {
@@ -100,6 +110,10 @@ std::optional<int> CustomWindow::ProcessMessages() {
 
 Graphics& CustomWindow::Gfx() {
     return *pGfx;
+}
+
+GraphicsGDI& CustomWindow::GDIGfx() {
+    return *pGDI;
 }
 
 
@@ -139,18 +153,20 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     //OutputDebugString(ss.str().c_str());
     OutputDebugString(mm(uMsg, lParam, wParam).c_str());
 
-
-    switch (uMsg) {
+    switch (uMsg) {        
         case WM_DESTROY: {
             PostQuitMessage(0);
             return 0;
         }
         case WM_PAINT: {
+            /*
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-
             FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+            OnPaint(hdc);
+
             EndPaint(hwnd, &ps);
+            */
             break;
         }
         // clear keystate when window loses focus to prevent input getting "stuck"
