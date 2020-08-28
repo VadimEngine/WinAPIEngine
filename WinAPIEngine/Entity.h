@@ -16,6 +16,4 @@ public:
 	int getHeight();
 
 	void update(Keyboard& kbd);
-
 };
-

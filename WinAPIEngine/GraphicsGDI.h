@@ -7,15 +7,20 @@
 #pragma comment (lib,"Gdiplus.lib")
 #include <objidl.h>
 #include <gdiplus.h>
+#include "Vec2.h"
+#include "Camera.h"
+#include "Keyboard.h"
 
 class GraphicsGDI {
 
 private:
 	HWND hWnd;
-	HDC theHDC;
 	Gdiplus::Graphics graphics;
+	//Add CachedBitmap?
 	Gdiplus::Bitmap colorBuffer;
-
+	unsigned int background_color;
+	Gdiplus::BitmapData bitmapData;
+	unsigned int* pRawBitmapOrig = nullptr;
 
 public:
 	GraphicsGDI(HWND hWnd);
@@ -23,12 +28,21 @@ public:
 	GraphicsGDI& operator=(const GraphicsGDI&) = delete;
 	~GraphicsGDI();
 
-	void renderRectangle(int x, int y, int width, int height);
+	void startFrame();
 
 	void renderFillRectangle(int x, int y, int width, int height);
+	void DrawFrame();
 
-	void EndFrame(int x, int y);
+	void setPixel(int x, int y, unsigned int color);
+	void drawLine(Vec2 v1, Vec2 v2, unsigned int color);
 
-	void clearFrame(float delta);
+	void drawTriangle(Vec2 v1, Vec2 v2,  Vec2 v3, const unsigned int color);
+
+	void drawScene(Keyboard& kbd);
+
+private:
+	void drawFlatTopTriangle(const Vec2 v1, const Vec2 v2, const Vec2 v3, unsigned int color);
+	void drawFlatBottomTriangle(const Vec2 v1, const Vec2 v2, const Vec2 v3, unsigned int color);
+	bool inbound(const int x, const int y);
+	bool inbound(const Vec2 theVec);
 };
-

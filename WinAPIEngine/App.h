@@ -11,9 +11,11 @@ private:
 	Entity ent;
 public:
 	App();
+	~App();
 	// master frame / message loop
 	int Go();
 private:
 	void DoFrame();
+	std::vector<std::unique_ptr<class Box>> boxes;
 };
 

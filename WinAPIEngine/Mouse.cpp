@@ -3,22 +3,18 @@
 //EVENT
 
 Mouse::Event::Event() noexcept
-	:
-	type(Type::Invalid),
+	: type(Type::Invalid),
 	leftIsPressed(false),
 	rightIsPressed(false),
 	x(0),
-	y(0)
-{}
+	y(0) {}
 
 Mouse::Event::Event(Mouse::Event::Type type, const Mouse& parent) noexcept
-	:
-	type(type),
+	: type(type),
 	leftIsPressed(parent.leftIsPressed),
 	rightIsPressed(parent.rightIsPressed),
 	x(parent.x),
-	y(parent.y)
-{}
+	y(parent.y) {}
 
 bool Mouse::Event::IsValid() const noexcept {
 	return type != Type::Invalid;
@@ -83,6 +79,10 @@ Mouse::Event Mouse::Read() noexcept {
 	} else {
 		return Mouse::Event();
 	}
+}
+
+bool Mouse::IsEmpty() const noexcept {
+	return buffer.empty();
 }
 
 void Mouse::Flush() noexcept {

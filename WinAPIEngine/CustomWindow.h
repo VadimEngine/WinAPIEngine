@@ -2,7 +2,7 @@
 
 #include "CustomWinHeader.h"
 
-#pragma comment(lib,"d3d11.lib")
+
 #include <string>
 #include <sstream>
 #include <optional>
@@ -13,7 +13,8 @@
 #include "Graphics.h"
 #include "GraphicsGDI.h"
 #include "Entity.h"
-
+#include <objidl.h>
+#include <gdiplus.h>
 
 
 class CustomWindow {
@@ -46,9 +47,6 @@ private:
 public:
 	Keyboard kbd;
 	Mouse mouse;
-
-
-
 public:
 	CustomWindow(int width, int height, const char* name);
 	~CustomWindow();
