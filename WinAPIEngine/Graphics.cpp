@@ -106,17 +106,13 @@ void Graphics::DrawIndexed(UINT count) noexcept
 	pContext->DrawIndexed(count, 0u, 0u);
 }
 
-void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
-{
+void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept {
 	projection = proj;
 }
 
-DirectX::XMMATRIX Graphics::GetProjection() const noexcept
-{
+DirectX::XMMATRIX Graphics::GetProjection() const noexcept {
 	return projection;
 }
-
-
 
 void Graphics::DrawTestTriange(float angle, float x, float z) {
 	//Shaders are written HLSL (Hight level shader language)

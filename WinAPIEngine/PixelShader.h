@@ -1,8 +1,7 @@
 #pragma once
 #include "Bindable.h"
 
-class PixelShader : public Bindable
-{
+class PixelShader : public Bindable {
 public:
 	PixelShader(Graphics& gfx, const std::wstring& path);
 	void Bind(Graphics& gfx) noexcept override;

@@ -24,7 +24,6 @@ public:
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
 
-
 private:
 	DirectX::XMMATRIX projection;
 

@@ -1,15 +1,11 @@
 #pragma once
 #include "Bindable.h"
 
-class VertexBuffer : public Bindable
-{
+class VertexBuffer : public Bindable {
 public:
 	template<class V>
 	VertexBuffer(Graphics& gfx, const std::vector<V>& vertices)
-		:
-		stride(sizeof(V))
-	{
-		//INFOMAN(gfx);
+		: stride(sizeof(V)) {
 
 		D3D11_BUFFER_DESC bd = {};
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
