@@ -1,23 +1,17 @@
 #pragma once
+#include "Graphics.h"
 
-#include "Vec3.h"
-#include <math.h>
-
-
-class Camera {
+class Camera
+{
 public:
-	Vec3 pos;
-	Vec3 dir;
-
-	//near, far
-
-	Camera(Vec3 pos, Vec3 dir);
-
-	void moveForward();
-	void moveBack();
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	DirectX::XMMATRIX GetMatrix() const noexcept;
+	void SpawnControlWindow() noexcept;
+	void Reset() noexcept;
+private:
+	float r = 20.0f;
+	float theta = 0.0f;
+	float phi = 0.0f;
+	float pitch = 0.0f;
+	float yaw = 0.0f;
+	float roll = 0.0f;
 };
-

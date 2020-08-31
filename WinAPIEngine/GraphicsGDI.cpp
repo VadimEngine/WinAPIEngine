@@ -222,7 +222,7 @@ bool GraphicsGDI::inbound(const Vec2 theVec) {
 
 
 void GraphicsGDI::drawScene(Keyboard& kbd) {
-    static Camera cam(Vec3(640 / 2, 480 / 2, -400), Vec3(0, 0, 0));
+    static CameraGDI cam(Vec3(640 / 2, 480 / 2, -400), Vec3(0, 0, 0));
 
     float dTheta = 1;
 

@@ -11,17 +11,20 @@
 #include "Surface.h"
 #include "GDIPlusManager.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
+
 GDIPlusManager gdipm;
 
 
 //GDI
 #include "Mat3.h"
 #include "Calculator.h"
-#include "Camera.h"
+#include "CameraGDI.h"
 
 App::App()
 	: wnd(640, 480, "Custom Window"), ent(300, 300, 50, 50) {
-	
 	class Factory
 	{
 	public:
@@ -82,6 +85,7 @@ App::App()
 	const auto s = Surface::FromFile("Images\\kappa50.png");
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f)); wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	wnd.Gfx().SetCamera(DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f));
 }
 
 App::~App(){}
@@ -104,14 +108,33 @@ void App::DoFrame() {
 	wnd.SetTitle(oss.str());
 	*/
 
-	const auto dt = timer.Mark();
-	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
+	const auto dt = timer.Mark() * speed_factor;
+	
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	wnd.Gfx().SetCamera(cam.GetMatrix());
+
 	for (auto& d : drawables)
 	{
 		d->Update(wnd.kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(wnd.Gfx());
 	}
+
+	// imgui window to control simulation speed
+	if (ImGui::Begin("Simulation Speed"))
+	{
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Status: %s", wnd.kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING");
+	}
+
+	ImGui::End();
+	// imgui window to control camera
+	cam.SpawnControlWindow();
+
+	// present
 	wnd.Gfx().EndFrame();
+
+	
 
 	//LOOP
 	Mouse::Event e = wnd.mouse.Read();

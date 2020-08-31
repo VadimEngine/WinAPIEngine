@@ -2,13 +2,16 @@
 //https://docs.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-drawing-a-line-use
 //https://docs.microsoft.com/en-us/windows/win32/gdiplus/-gdiplus-gdi-start
 
+//TEST THE FPS WITH IMGUI: ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+
 #pragma once
 #include "CustomWinHeader.h"
 #pragma comment (lib,"Gdiplus.lib")
 #include <objidl.h>
 #include <gdiplus.h>
 #include "Vec2.h"
-#include "Camera.h"
+#include "CameraGDI.h"
 #include "Keyboard.h"
 
 class GraphicsGDI {
