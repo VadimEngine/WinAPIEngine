@@ -143,9 +143,7 @@ void GraphicsGDI::drawTriangle(Vec2 v0,
             pv2 = temp;
         }
         drawFlatBottomTriangle(*pv0, *pv1, *pv2, color);
-    }
-    else {
-
+    } else {
         float alphaSplit = (pv1->y - pv0->y) / (pv2->y - pv0->y);
 
         const Vec2 vi(pv0->x + (pv2->x - pv0->x) * alphaSplit,

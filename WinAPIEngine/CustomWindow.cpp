@@ -78,6 +78,7 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     ImGui_ImplWin32_Init(hWnd);
 
     pGDI = std::make_unique<GraphicsGDI>(hWnd);
+    pGOpenGL = std::make_unique<GraphicsOpenGL>(hWnd);
 }
 
 CustomWindow::~CustomWindow() {
@@ -115,6 +116,9 @@ GraphicsGDI& CustomWindow::GDIGfx() {
     return *pGDI;
 }
 
+GraphicsOpenGL& CustomWindow::GOpenGL() {
+    return *pGOpenGL;
+}
 //Call back function
 
 LRESULT CALLBACK CustomWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -296,4 +300,10 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+
+HDC CustomWindow::getDeviceContext() {
+    //return nullptr;
+    return GetDC(hWnd);
 }

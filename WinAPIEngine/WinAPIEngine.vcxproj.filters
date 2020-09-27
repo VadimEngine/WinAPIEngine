@@ -16,26 +16,11 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{139d6a35-9a81-4fa6-9c02-9d154fefe72f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Bindable">
-      <UniqueIdentifier>{e262f57e-2f8e-4481-8b8f-5ef083e1a3cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Bindable">
-      <UniqueIdentifier>{8fd9f952-d576-4243-b3ee-7e23d6a757b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\GDI">
       <UniqueIdentifier>{b50f827e-0419-458f-b973-8fa0f50143ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\GDI">
       <UniqueIdentifier>{7ec466b4-9d4a-4cb7-a798-0fc5aa70ce1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Drawable">
-      <UniqueIdentifier>{8f4d546d-4b63-4e4e-9f14-7c89f3af5a1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Drawable">
-      <UniqueIdentifier>{16b71ba4-a19d-481b-a7d5-117ecde1360e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Geometry">
-      <UniqueIdentifier>{eb8ab1e9-5b29-4d29-b8f0-760974ebb3aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{5fd28653-d305-4ba4-9044-1c9c40825e15}</UniqueIdentifier>
@@ -43,34 +28,46 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{9f481b0d-d088-4ce4-bca7-f40f06448a40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{b8cd02fd-af5a-4af9-acec-2c2cec42c761}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{a495956b-5cf0-41d3-8ce4-66749570661c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Direct3D">
+      <UniqueIdentifier>{6ab11f93-6741-487d-8262-4f4913cf0662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Direct3D\Bindable">
+      <UniqueIdentifier>{e262f57e-2f8e-4481-8b8f-5ef083e1a3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Direct3D\Geometry">
+      <UniqueIdentifier>{eb8ab1e9-5b29-4d29-b8f0-760974ebb3aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Direct3D\Drawable">
+      <UniqueIdentifier>{8f4d546d-4b63-4e4e-9f14-7c89f3af5a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Direct3D">
+      <UniqueIdentifier>{1953a9e0-8f8e-4b73-b810-8666e5eb9e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Direct3D\Bindable">
+      <UniqueIdentifier>{8fd9f952-d576-4243-b3ee-7e23d6a757b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Direct3D\Drawable">
+      <UniqueIdentifier>{16b71ba4-a19d-481b-a7d5-117ecde1360e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\OpenGL">
+      <UniqueIdentifier>{ae94bdb5-5c3f-4f60-940b-0134d78494b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\OpenGL">
+      <UniqueIdentifier>{36d86f46-811b-4414-8775-7cfbf004ecf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CustomWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowMessageMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="App.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CustomTimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\GDI</Filter>
@@ -91,55 +88,34 @@
       <Filter>Source Files\GDI</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="InputLayout.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="PixelShader.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Topology.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="TransformCbuf.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Source Files\Bindable</Filter>
+      <Filter>Source Files\Direct3D\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Box.cpp">
-      <Filter>Source Files\Drawable</Filter>
+      <Filter>Source Files\Direct3D\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Drawable.cpp">
-      <Filter>Source Files\Drawable</Filter>
+      <Filter>Source Files\Direct3D\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Melon.cpp">
-      <Filter>Source Files\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Pyramid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Surface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GDIPlusManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sampler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sheet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinnedBox.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Direct3D\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>Source Files\imgui</Filter>
@@ -165,61 +141,97 @@
     <ClCompile Include="CameraGDI.cpp">
       <Filter>Source Files\GDI</Filter>
     </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomTimer.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomWindow.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GDIPlusManager.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pyramid.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampler.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Sheet.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedBox.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowMessageMap.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractGraphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshGDI.cpp">
+      <Filter>Source Files\GDI</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsOpenGL.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderOpenGL.cpp">
+      <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshOpenGL.cpp">
+      <Filter>Source Files\OpenGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CustomWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowMessageMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomWinHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bindable.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="BindableBase.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="VertexShader.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Topology.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="PixelShader.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="InputLayout.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Calculator.h">
       <Filter>Header Files\GDI</Filter>
@@ -240,55 +252,40 @@
       <Filter>Header Files\GDI</Filter>
     </ClInclude>
     <ClInclude Include="TransformCbuf.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Box.h">
-      <Filter>Header Files\Drawable</Filter>
+      <Filter>Header Files\Direct3D\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable.h">
-      <Filter>Header Files\Drawable</Filter>
+      <Filter>Header Files\Direct3D\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="ConstantBuffers.h">
-      <Filter>Header Files\Bindable</Filter>
+      <Filter>Header Files\Direct3D\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="DrawableBase.h">
-      <Filter>Header Files\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomMath.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Direct3D\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Prism.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Cone.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Melon.h">
-      <Filter>Header Files\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Surface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GDIPlusManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sampler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Direct3D\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Header Files\imgui</Filter>
@@ -318,19 +315,76 @@
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Pyramid.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Sheet.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedBox.h">
-      <Filter>Header Files\Geometry</Filter>
+      <Filter>Header Files\Direct3D\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="CameraGDI.h">
       <Filter>Header Files\GDI</Filter>
     </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomTimer.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomMath.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomWindow.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomWinHeader.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GDIPlusManager.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowMessageMap.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractGraphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGDI.h">
+      <Filter>Header Files\GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsOpenGL.h">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderOpenGL.h">
+      <Filter>Header Files\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshOpenGL.h">
+      <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

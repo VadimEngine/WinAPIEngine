@@ -15,6 +15,7 @@
 #include "Entity.h"
 #include <objidl.h>
 #include <gdiplus.h>
+#include "GraphicsOpenGL.h"
 
 
 class CustomWindow {
@@ -43,6 +44,8 @@ private:
 	std::unique_ptr<Graphics> pGfx;
 	//GDIgraphics
 	std::unique_ptr<GraphicsGDI> pGDI;
+	//opengl
+	std::unique_ptr<GraphicsOpenGL> pGOpenGL;
 
 public:
 	Keyboard kbd;
@@ -56,6 +59,10 @@ public:
 	static std::optional<int> ProcessMessages();
 	Graphics& Gfx();
 	GraphicsGDI& GDIGfx();
+	GraphicsOpenGL& GOpenGL();
+
+	HDC getDeviceContext();
+
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

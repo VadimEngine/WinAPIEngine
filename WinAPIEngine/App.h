@@ -4,19 +4,28 @@
 #include "ImguiManager.h"
 #include "Camera.h"
 
+#include "Scene.h"
 
-#include "Entity.h"
+#include <memory>
+#include <algorithm>
+#include "CustomMath.h"
+#include "GDIPlusManager.h"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_win32.h"
+#include "imgui/imgui_impl_dx11.h"
 
 class App {
 private:
 	ImguiManager imgui;
 	CustomWindow wnd;
 	CustomTimer timer;
-	Entity ent;
-	std::vector<std::unique_ptr<class Drawable>> drawables;
-	float speed_factor = 1.0f;
+
 	Camera cam;
-	static constexpr size_t nDrawables = 180;
+
+	//Update to vector of scenes and cycle through them with tab(Or imgui)
+	Scene theScene;
+
 public:
 	App();
 	~App();
