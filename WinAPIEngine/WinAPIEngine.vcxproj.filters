@@ -144,9 +144,6 @@
     <ClCompile Include="App.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Direct3D</Filter>
-    </ClCompile>
     <ClCompile Include="CustomTimer.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -189,9 +186,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractGraphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MeshGDI.cpp">
       <Filter>Source Files\GDI</Filter>
     </ClCompile>
@@ -203,6 +197,21 @@
     </ClCompile>
     <ClCompile Include="MeshOpenGL.cpp">
       <Filter>Source Files\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraD3D.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneD3d.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,9 +347,6 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\Direct3D</Filter>
-    </ClInclude>
     <ClInclude Include="CustomMath.h">
       <Filter>Header Files\Direct3D</Filter>
     </ClInclude>
@@ -386,6 +392,24 @@
     <ClInclude Include="MeshOpenGL.h">
       <Filter>Header Files\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraD3D.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneD3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinAPIEngine.rc">
@@ -420,5 +444,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="WinAPIEngine.aps" />
+    <None Include="ShadersOpenGL\image.vert" />
+    <None Include="ShadersOpenGL\image.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Other\GitTest\OpenGLClient\PhysicsClient2\OpenGLBook1\res\font.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

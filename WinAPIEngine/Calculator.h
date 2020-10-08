@@ -8,10 +8,11 @@ private:
 	Calculator();
 public:
 
-	static Vec3 rotateAroundCenter(Vec3 coord, Vec3 Center,
+	static Vec3 rotateAroundCenter(Vec3 coord, Vec3 center,
 		float xAngle, float yAngle, float zAngle);
 
-
+	static Vec3 rotateAroundCenter(Vec3 coord, Vec3 center,
+		Vec3 direction);
 
 };
 

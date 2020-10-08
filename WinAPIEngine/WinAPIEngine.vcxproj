@@ -152,12 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractGraphics.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Calculator.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraD3D.cpp" />
     <ClCompile Include="CameraGDI.cpp" />
     <ClCompile Include="CustomTimer.cpp" />
     <ClCompile Include="CustomWindow.cpp" />
@@ -185,8 +185,11 @@
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="GraphicsOpenGL.cpp" />
+    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="RenderableMesh.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneD3d.cpp" />
     <ClCompile Include="ShaderOpenGL.cpp" />
     <ClCompile Include="Sheet.cpp" />
     <ClCompile Include="SkinnedBox.cpp" />
@@ -202,12 +205,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractGraphics.h" />
+    <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableBase.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Calculator.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraD3D.h" />
     <ClInclude Include="CameraGDI.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstantBuffers.h" />
@@ -245,9 +250,12 @@
     <ClInclude Include="Prism.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="GraphicsOpenGL.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="RenderableMesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneD3d.h" />
     <ClInclude Include="ShaderOpenGL.h" />
     <ClInclude Include="Sheet.h" />
     <ClInclude Include="SkinnedBox.h" />
@@ -346,7 +354,12 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ShadersOpenGL\image.frag" />
+    <None Include="ShadersOpenGL\image.vert" />
     <None Include="WinAPIEngine.aps" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Other\GitTest\OpenGLClient\PhysicsClient2\OpenGLBook1\res\font.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,8 +13,11 @@
 #include "Vec2.h"
 #include "CameraGDI.h"
 #include "Keyboard.h"
+#include "AbstractGraphics.h"
+#include <unordered_map>
 
-class GraphicsGDI {
+
+class GraphicsGDI : public AbstractGraphics {
 
 private:
 	HWND hWnd;
@@ -25,13 +28,28 @@ private:
 	Gdiplus::BitmapData bitmapData;
 	unsigned int* pRawBitmapOrig = nullptr;
 
+	Camera* camera;
+
+	//font texture
+
+	unsigned char* image;
+	int width, height;
+	//this should be static
+	std::unordered_map<char, glm::vec2> charKeyMap;
+
 public:
+
+	//Add normolized/non-normalized drawing method
 	GraphicsGDI(HWND hWnd);
 	GraphicsGDI(const GraphicsGDI&) = delete;
 	GraphicsGDI& operator=(const GraphicsGDI&) = delete;
 	~GraphicsGDI();
 
 	void startFrame();
+	void drawFrame();
+	void drawMesh(class RenderableMesh& theMesh);
+	void setCamera(Camera* camera);
+
 
 	void renderFillRectangle(int x, int y, int width, int height);
 	void DrawFrame();
@@ -42,6 +60,18 @@ public:
 	void drawTriangle(Vec2 v1, Vec2 v2,  Vec2 v3, const unsigned int color);
 
 	void drawScene(Keyboard& kbd);
+
+	std::string toString();
+
+	void drawString(std::string theString, float x, float y);
+
+	void renderImage(float x, float y);
+
+	void renderSubImage(float x, float y, float subX, 
+						float subY, float subWidth,
+						float subHeight, unsigned char* theImage);
+
+
 
 private:
 	void drawFlatTopTriangle(const Vec2 v1, const Vec2 v2, const Vec2 v3, unsigned int color);

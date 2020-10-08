@@ -1,11 +1,88 @@
 #include "GraphicsGDI.h"
-
+#include "RenderableMesh.h"
 #include <math.h>
 #include "Calculator.h"
+#include <SOIL.h>
+
+
 
 GraphicsGDI::GraphicsGDI(HWND hWnd)
 : hWnd(hWnd), graphics(GetDC(hWnd)), colorBuffer(640, 480, PixelFormat32bppRGB),
-background_color(0xFFFFFF){}
+background_color(0xFFFFFF){
+    image = SOIL_load_image("Images\\font.png", &width, &height, 0, SOIL_LOAD_RGBA);
+
+    charKeyMap.insert({ 'A', glm::vec2(0,0) });
+    charKeyMap.insert({ 'B', glm::vec2(1,0) });
+    charKeyMap.insert({ 'C', glm::vec2(2,0) });
+    charKeyMap.insert({ 'D', glm::vec2(3,0) });
+    charKeyMap.insert({ 'E', glm::vec2(4,0) });
+    charKeyMap.insert({ 'F', glm::vec2(5,0) });
+    charKeyMap.insert({ 'G', glm::vec2(6,0) });
+    charKeyMap.insert({ 'H', glm::vec2(7,0) });
+    charKeyMap.insert({ 'I', glm::vec2(8,0) });
+    charKeyMap.insert({ 'J', glm::vec2(9,0) });
+    charKeyMap.insert({ 'K', glm::vec2(10,0) });
+    charKeyMap.insert({ 'L', glm::vec2(11,0) });
+    charKeyMap.insert({ 'M', glm::vec2(12,0) });
+    charKeyMap.insert({ 'N', glm::vec2(13,0) });
+    charKeyMap.insert({ 'O', glm::vec2(14,0) });
+    charKeyMap.insert({ 'P', glm::vec2(15,0) });
+    charKeyMap.insert({ 'Q', glm::vec2(16,0) });
+    charKeyMap.insert({ 'R', glm::vec2(17,0) });
+    charKeyMap.insert({ 'S', glm::vec2(18,0) });
+    charKeyMap.insert({ 'T', glm::vec2(19,0) });
+    charKeyMap.insert({ 'U', glm::vec2(20,0) });
+    charKeyMap.insert({ 'V', glm::vec2(21,0) });
+    charKeyMap.insert({ 'W', glm::vec2(22,0) });
+    charKeyMap.insert({ 'X', glm::vec2(23,0) });
+    charKeyMap.insert({ 'Y', glm::vec2(24,0) });
+    charKeyMap.insert({ 'Z', glm::vec2(25,0) });
+
+    charKeyMap.insert({ '.', glm::vec2(26,0) });
+    charKeyMap.insert({ ',', glm::vec2(27,0) });
+
+    charKeyMap.insert({ 'a', glm::vec2(0,1) });
+    charKeyMap.insert({ 'b', glm::vec2(1,1) });
+    charKeyMap.insert({ 'c', glm::vec2(2,1) });
+    charKeyMap.insert({ 'd', glm::vec2(3,1) });
+    charKeyMap.insert({ 'e', glm::vec2(4,1) });
+    charKeyMap.insert({ 'f', glm::vec2(5,1) });
+    charKeyMap.insert({ 'g', glm::vec2(6,1) });
+    charKeyMap.insert({ 'h', glm::vec2(7,1) });
+    charKeyMap.insert({ 'i', glm::vec2(8,1) });
+    charKeyMap.insert({ 'j', glm::vec2(9,1) });
+    charKeyMap.insert({ 'k', glm::vec2(10,1) });
+    charKeyMap.insert({ 'l', glm::vec2(11,1) });
+    charKeyMap.insert({ 'm', glm::vec2(12,1) });
+    charKeyMap.insert({ 'n', glm::vec2(13,1) });
+    charKeyMap.insert({ 'o', glm::vec2(14,1) });
+    charKeyMap.insert({ 'p', glm::vec2(15,1) });
+    charKeyMap.insert({ 'q', glm::vec2(16,1) });
+    charKeyMap.insert({ 'r', glm::vec2(17,1) });
+    charKeyMap.insert({ 's', glm::vec2(18,1) });
+    charKeyMap.insert({ 't', glm::vec2(19,1) });
+    charKeyMap.insert({ 'u', glm::vec2(20,1) });
+    charKeyMap.insert({ 'v', glm::vec2(21,1) });
+    charKeyMap.insert({ 'w', glm::vec2(22,1) });
+    charKeyMap.insert({ 'x', glm::vec2(23,1) });
+    charKeyMap.insert({ 'y', glm::vec2(24,1) });
+    charKeyMap.insert({ 'z', glm::vec2(25,1) });
+
+    charKeyMap.insert({ '0', glm::vec2(0,2) });
+    charKeyMap.insert({ '1', glm::vec2(1,2) });
+    charKeyMap.insert({ '2', glm::vec2(2,2) });
+    charKeyMap.insert({ '3', glm::vec2(3,2) });
+    charKeyMap.insert({ '4', glm::vec2(4,2) });
+    charKeyMap.insert({ '5', glm::vec2(5,2) });
+    charKeyMap.insert({ '6', glm::vec2(6,2) });
+    charKeyMap.insert({ '7', glm::vec2(7,2) });
+    charKeyMap.insert({ '8', glm::vec2(8,2) });
+    charKeyMap.insert({ '9', glm::vec2(9,2) });
+    charKeyMap.insert({ ':', glm::vec2(14,2) });
+
+
+
+}
 
 GraphicsGDI::~GraphicsGDI() {}
 
@@ -25,7 +102,7 @@ void GraphicsGDI::startFrame() {
         for (int j = 0; j < 480; j++) {
             //Stride is number of bytes needed to store one row of the bitmap
             int index = j * bitmapData.Stride / 4 + i;
-            pRawBitmapOrig[index] = 0xFFFFFF;
+            pRawBitmapOrig[index] = 0x000000;
         }
     }
 }
@@ -172,8 +249,8 @@ void GraphicsGDI::drawFlatTopTriangle(const Vec2 v0, const Vec2 v1, const Vec2 v
     for (int y = yStart; y < yEnd; y++) {
         // calculate start and end points (x-coords)
         // add 0.5 to y value because we're calculating based on pixel CENTERS
-        const double px0 = m0 * ((float)(y)+0.5f - v0.y) + v0.x;
-        const double px1 = m1 * ((float)(y)+0.5f - v1.y) + v1.x;
+        const float px0 = m0 * (float)((float)(y)+0.5f - v0.y) + v0.x;
+        const float px1 = m1 * (float)((float)(y)+0.5f - v1.y) + v1.x;
 
         // calculate start and end pixels
         const int xStart = (int)ceil(px0 - 0.5f);
@@ -285,4 +362,80 @@ void GraphicsGDI::drawScene(Keyboard& kbd) {
     //    Vec2(wnd.mouse.GetPosX(), wnd.mouse.GetPosY()), 0x00FF00);
 
     DrawFrame();
+}
+
+void GraphicsGDI::drawFrame() {
+    colorBuffer.UnlockBits(&bitmapData);
+    Gdiplus::CachedBitmap cached(&colorBuffer, &graphics);
+    graphics.DrawCachedBitmap(&cached, 0, 0);
+}
+
+void GraphicsGDI::drawMesh(RenderableMesh& theMesh) {
+    float scale = 1;
+    for (int i = 0; i < theMesh.indicies.size(); i += 3) {
+        unsigned int i1 = theMesh.indicies[i];
+        unsigned int i2 = theMesh.indicies[i + 1];
+        unsigned int i3 = theMesh.indicies[i + 2];
+
+        Vec3 v1(theMesh.vertices[i1].x * scale, theMesh.vertices[i1].y * scale, theMesh.vertices[i1].z * scale);
+        Vec3 v2(theMesh.vertices[i2].x * scale, theMesh.vertices[i2].y * scale, theMesh.vertices[i2].z * scale);
+        Vec3 v3(theMesh.vertices[i3].x * scale, theMesh.vertices[i3].y * scale, theMesh.vertices[i3].z * scale);
+
+        v1 = Calculator::rotateAroundCenter(v1, camera->pos, camera->dir);
+        v2 = Calculator::rotateAroundCenter(v2, camera->pos, camera->dir);
+        v3 = Calculator::rotateAroundCenter(v3, camera->pos, camera->dir);
+
+        drawTriangle(v1, v2, v3, theMesh.color);
+        drawLine(v1, v2, 0x000000);
+        drawLine(v2, v3, 0x000000);
+        drawLine(v3, v1, 0x000000);
+    }
+}
+
+
+void GraphicsGDI::setCamera(Camera* camera) {
+    this->camera = camera;
+}
+
+std::string GraphicsGDI::toString() {
+    return "Custom";
+}
+
+
+void GraphicsGDI::drawString(std::string theString, float x, float y) {
+    for (int i = 0; i < theString.size(); i++) {
+        if (theString[i] != ' ') {
+            glm::vec2 charLoc = charKeyMap[theString[i]];
+            renderSubImage(x + i*7, y, charLoc.x * 6, charLoc.y * 8, 6, 8, image);
+        }
+    }
+}
+
+
+void GraphicsGDI::renderImage(float x, float y) {
+    //draw image at x,y
+    for (int texY = 0; texY < height; texY++) {
+        for (int texX = 0; texX < width; texX++) {
+            const unsigned int index = texX + (texY * width);
+
+            const unsigned int color = ((int*)image)[index];
+            setPixel(x + texX, y + texY, color);
+        }
+    }
+
+}
+
+void GraphicsGDI::renderSubImage(float x, float y, float subX, float subY,
+                                 float subWidth, float subHeight, unsigned char* theImage) {
+    //treat 0xFF00FF as alpha
+    for (int texY = subY; texY < subY + subHeight; texY++) {
+        for (int texX = subX; texX < subX + subWidth; texX++) {
+            const unsigned int index = texX + (texY * width);
+
+            const unsigned int color = ((int*)theImage)[index];
+            if ((color << 8) >> 8 != 0xFF00FF) {
+                setPixel(x + texX- subX, y + texY- subY, color);
+            }
+        }
+    }
 }

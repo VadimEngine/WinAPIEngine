@@ -2,9 +2,10 @@
 #include "CustomWindow.h"
 #include "CustomTimer.h"
 #include "ImguiManager.h"
-#include "Camera.h"
+#include "CameraD3D.h"
 
 #include "Scene.h"
+#include "SceneD3d.h"
 
 #include <memory>
 #include <algorithm>
@@ -21,10 +22,25 @@ private:
 	CustomWindow wnd;
 	CustomTimer timer;
 
-	Camera cam;
+	CameraD3D cam;
 
 	//Update to vector of scenes and cycle through them with tab(Or imgui)
-	Scene theScene;
+	SceneD3d theSceneD3d;
+
+	//list of graphics
+	//list of scenes
+	//graphics pointer
+	//camera (Camera should be managed by the scene...)
+
+	unsigned int graphicsIndex;
+	unsigned int sceneIndex;
+
+	std::vector<AbstractGraphics*> graphics;
+	std::vector<Scene> scenes;
+	//std::vector
+
+	
+
 
 public:
 	App();
@@ -33,5 +49,7 @@ public:
 	int Go();
 private:
 	void DoFrame();
+
+	void populateScenes();
 };
 
