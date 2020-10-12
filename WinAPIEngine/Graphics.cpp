@@ -1,4 +1,6 @@
 #include "Graphics.h"
+#include "Camera.h"
+#include "RenderableMesh.h"
 #include <sstream>
 #include <d3dcompiler.h>
 #include <cmath>
@@ -6,10 +8,12 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
+#include "CustomTimer.h"
 
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
 
 
 Graphics::Graphics(HWND hWnd) {
@@ -344,4 +348,443 @@ void Graphics::DrawTestTriange(float angle, float x, float z) {
 	pContext->RSSetViewports(1u, &vp);
 
 	pContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
+}
+
+
+void Graphics::startFrame() {
+	BeginFrame(0.5f, 0.0f, 0.5f);
+	theVertices.clear();
+	theIndices.clear();
+}
+
+void Graphics::drawMesh(RenderableMesh& theMesh) {
+	unsigned int oldSize = theVertices.size() / 3;
+
+	for (int i = 0; i < theMesh.vertices.size(); i++) {
+		//add coordinate
+		theVertices.push_back(theMesh.vertices[i].x);
+		theVertices.push_back(theMesh.vertices[i].y);
+		theVertices.push_back(theMesh.vertices[i].z);
+	}
+
+	for (int i = 0; i < theMesh.indicies.size(); i++) {
+		unsigned int newIndex = theMesh.indicies[i] + oldSize;
+		theIndices.push_back(newIndex);
+	}
+}
+
+
+void Graphics::drawFrame() {
+	struct Vertex {
+		struct {
+			float x;
+			float y;
+			float z;
+		} pos;
+	};
+
+	Vertex* vertices2 = new Vertex[theVertices.size()/3];
+	for (int i = 0; i < theVertices.size(); i+=3) {
+		float x = theVertices[i];
+		float y = theVertices[i+1];
+		float z = theVertices[i+2];
+		vertices2[i/3] = { x, y, -z };
+	}
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+	bd.ByteWidth = theVertices.size() * sizeof(float);
+	bd.StructureByteStride = sizeof(Vertex);
+	D3D11_SUBRESOURCE_DATA sd = {};
+	sd.pSysMem = vertices2;//vertices.data();
+	pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer);
+
+	//Bind vertex buffer to pipeline
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	//IA = Input assembler
+	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	unsigned short* indices = new unsigned short[theIndices.size()];
+	for (int i = 0; i < theIndices.size(); i++) {
+		indices[theIndices.size() - 1 - i] = theIndices[i];
+	}
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.CPUAccessFlags = 0u;
+	ibd.MiscFlags = 0u;
+	ibd.ByteWidth = theIndices.size() * sizeof(unsigned short);
+	ibd.StructureByteStride = sizeof(unsigned short);
+	D3D11_SUBRESOURCE_DATA isd = {};
+	isd.pSysMem = indices;//indices.data();
+	pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer);
+
+	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
+	// Create constant buffer for transformation matrix
+	struct ConstanstBuffer {
+		DirectX::XMMATRIX transform;
+	};
+
+	float camAngle = CustomCamera->cameraFront.x;
+	float camX = CustomCamera->cameraPos.x;
+	float camY = CustomCamera->cameraPos.y;
+	float camZ = CustomCamera->cameraPos.z;
+
+	const ConstanstBuffer cb = {
+		{
+			DirectX::XMMatrixTranspose(
+				DirectX::XMMatrixRotationZ(camAngle) *
+				DirectX::XMMatrixRotationX(camAngle) *
+				DirectX::XMMatrixTranslation(camX, 0, camZ + 4.0) *
+				DirectX::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.5, 10.0f)
+			)
+		}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
+
+	// bind constant buffer to vertex shader
+	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
+
+	struct ConstantBuffer2 {
+		struct {
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[6];
+	};
+
+	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	const ConstantBuffer2 cb2 = {
+		{
+
+			{r,0.0f,1.0f},
+			{1.0f,0.0f,0.0f},
+			{0.0f,1.0f,0.0f},
+			{0.0f,0.0f,1.0f},
+			{1.0f,1.0f,0.0f},
+			{0.0f,1.0f,1.0f}
+		}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer2;
+	D3D11_BUFFER_DESC cbd2;
+	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd2.Usage = D3D11_USAGE_DEFAULT;
+	cbd2.CPUAccessFlags = 0u;
+	cbd2.MiscFlags = 0u;
+	cbd2.ByteWidth = sizeof(cb2);
+	cbd2.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd2 = {};
+	csd2.pSysMem = &cb2;
+	pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2);
+
+	// bind constant buffer to pixel shader
+	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
+
+	//create pixel shader
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+	D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
+	pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+
+	//bind pixel shader
+	pContext->PSSetShader(pPixelShader.Get(), 0, 0);
+
+	//create vertex shader
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
+	D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
+	pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
+
+	//bind vertex shader
+	pContext->VSSetShader(pVertexShader.Get(), 0, 0);
+
+	// input (vertex) layout (2nd position)
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] = {
+		//"position" match in vertex shader
+		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout);
+
+	// bind vertex layout
+	pContext->IASetInputLayout(pInputLayout.Get());
+
+	// Set primitive topology to triangle list (groups of 3 vertices)
+	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = 640;
+	vp.Height = 480;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pContext->RSSetViewports(1u, &vp);
+							
+	pContext->DrawIndexed((UINT)theIndices.size(), 0u, 0u);
+
+	delete[] vertices2;
+	delete[] indices;
+	EndFrame();
+}
+
+void Graphics::drawMesh(RenderableMesh& theMesh, float x, float y, float z, float angle) {
+
+	struct Vertex {
+		struct {
+			float x;
+			float y;
+			float z;
+		} pos;
+	};
+	//Create vertex buffer (1 2d triangle at center of screen)
+	/*
+	Vertex vertices[] = {
+		{ -1.0f, -1.0f, -1.0f},
+		{ 1.0f, -1.0f, -1.0f},
+		{ -1.0f, 1.0f, -1.0f},
+		{ 1.0f, 1.0f, -1.0f },
+		{ -1.0f, -1.0f, 1.0f},
+		{ 1.0f, -1.0f, 1.0f },
+		{ -1.0f, 1.0f, 1.0f },
+		{ 1.0f, 1.0f, 1.0f },
+	};
+	*/
+	//std::vector<Vertex> vertices;
+	Vertex* vertices2 = new Vertex[theMesh.vertices.size()];
+	for (int i = 0; i < theMesh.vertices.size(); i++) {
+		glm::vec3 vert = theMesh.vertices[i];
+		//vertices.push_back({ vert.x, vert.y, vert.z});
+		vertices2[i] = { vert.x, vert.y, -vert.z };
+	}
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+	bd.ByteWidth = theMesh.vertices.size() * 3 * sizeof(float);//vertices.size() * 3 * 4;//sizeof(vertices);
+	bd.StructureByteStride = sizeof(Vertex);
+	D3D11_SUBRESOURCE_DATA sd = {};
+	sd.pSysMem =vertices2;//vertices.data();
+	pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer);
+
+	//Bind vertex buffer to pipeline
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	//IA = Input assembler
+	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	//std::vector<unsigned int> indices;
+	unsigned short* indices = new unsigned short[theMesh.indicies.size()];
+	for (int i = 0; i < theMesh.indicies.size(); i++) {
+		//indices.push_back(theMesh.indicies[i]);
+		indices[theMesh.indicies.size() - 1 - i] = theMesh.indicies[i];
+	}
+
+
+	/*
+	//create index buffer
+	const unsigned short indices[] = {
+		0,2,1, 2,3,1,
+		1,3,5, 3,7,5,
+		2,6,3, 3,6,7,
+		4,5,7, 4,7,6,
+		0,4,2, 2,4,6,
+		0,1,4, 1,5,4
+	};
+	*/
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.CPUAccessFlags = 0u;
+	ibd.MiscFlags = 0u;
+	ibd.ByteWidth = theMesh.indicies.size() * sizeof(unsigned short);//indices.size() * 4;//sizeof(indices);
+	ibd.StructureByteStride = sizeof(unsigned short);//sizeof(unsigned short);
+	D3D11_SUBRESOURCE_DATA isd = {};
+	isd.pSysMem = indices;//indices.data();
+	pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer);
+
+	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
+
+	// Create constant buffer for transformation matrix
+	struct ConstanstBuffer {
+		DirectX::XMMATRIX transform;
+	};
+
+	float camAngle = CustomCamera->cameraFront.x;
+	float camX = CustomCamera->cameraPos.x;
+	float camY = CustomCamera->cameraPos.y;
+	float camZ = CustomCamera->cameraPos.z;
+
+	const ConstanstBuffer cb = {
+		{
+			DirectX::XMMatrixTranspose(
+				DirectX::XMMatrixRotationZ(camAngle) *
+				DirectX::XMMatrixRotationX(camAngle) *
+				DirectX::XMMatrixTranslation(camX, 0, camZ + 4.0) *
+				DirectX::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.5, 10.0f)
+			)
+		}
+	};
+
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
+
+	// bind constant buffer to vertex shader
+	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
+
+	struct ConstantBuffer2 {
+		struct {
+			float r;
+			float g;
+			float b;
+			float a;
+		} face_colors[6];
+	};
+	/*
+	//need more colors...
+	ConstantBuffer2* cb2 = new ConstantBuffer2[theMesh.indicies.size() / 3];
+	for (int i = 0; i < theMesh.indicies.size() / 3; i++) {
+		cb2[i] = {0.0f,0.0f,0.0f,1.0f};
+	}
+	*/
+
+	int color = theMesh.color;
+	float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+	const ConstantBuffer2 cb2 = {
+		{
+			
+			{r,0.0f,1.0f},
+			{1.0f,0.0f,0.0f},
+			{0.0f,1.0f,0.0f},
+			{0.0f,0.0f,1.0f},
+			{1.0f,1.0f,0.0f},
+			{0.0f,1.0f,1.0f}
+			/*
+			{1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f}
+			*/
+		}
+	};
+	
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer2;
+	D3D11_BUFFER_DESC cbd2;
+	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd2.Usage = D3D11_USAGE_DEFAULT;
+	cbd2.CPUAccessFlags = 0u;
+	cbd2.MiscFlags = 0u;
+	cbd2.ByteWidth = sizeof(cb2);//(theMesh.indicies.size() / 3) * 3 * 4;  //
+	cbd2.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd2 = {};
+	csd2.pSysMem = &cb2;
+	pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2);
+
+	// bind constant buffer to pixel shader
+	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
+	
+	//create pixel shader
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
+	D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
+	pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+
+	//bind pixel shader
+	pContext->PSSetShader(pPixelShader.Get(), 0, 0);
+
+	//create vertex shader
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
+	D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
+	pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
+
+	//bind vertex shader
+	pContext->VSSetShader(pVertexShader.Get(), 0, 0);
+
+
+	// input (vertex) layout (2nd position)
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] = {
+		//"position" match in vertex shader
+		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout);
+
+	// bind vertex layout
+	pContext->IASetInputLayout(pInputLayout.Get());
+
+	// Set primitive topology to triangle list (groups of 3 vertices)
+	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = 640;
+	vp.Height = 480;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pContext->RSSetViewports(1u, &vp);
+
+	//pContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
+	pContext->DrawIndexed((UINT)theMesh.indicies.size(), 0u, 0u);
+
+	delete[] vertices2;
+	delete[] indices;
+	//delete[] cb2;
+
+}
+
+void Graphics::setCamera(Camera* camera) {
+	this->CustomCamera = camera;
+}
+void Graphics::drawString(std::string, float x, float y) {
+
+}
+std::string Graphics::toString() {
+	return "";
 }

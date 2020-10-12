@@ -6,13 +6,12 @@ GDIPlusManager gdipm;
 App::App()
 	: wnd(640, 480, "Custom Window"), theSceneD3d(wnd.Gfx()){
 
-	graphics.push_back(&wnd.GDIGfx());
-	graphics.push_back(&wnd.GOpenGL());
+	graphics.push_back(&wnd.GDIGfx());//custom
+	graphics.push_back(&wnd.GOpenGL());//opengl
+	graphics.push_back(&wnd.Gfx());//direct 3d
 
 	graphicsIndex = 0;
 
-
-	//Scene scene;
 	//Populate Scene with meshes
 	populateScenes();
 	sceneIndex = 0;
@@ -42,13 +41,13 @@ void App::DoFrame() {
 		sceneIndex = (sceneIndex + 1) % scenes.size();
 	}
 
-
 	scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
+
+	//scenes[sceneIndex].drawDirect3D(&wnd.Gfx(), wnd.mouse, wnd.kbd);
+
 	//theScene.render(&wnd.GOpenGL(), wnd.mouse, wnd.kbd);
 
 	//theSceneD3d.render(wnd.Gfx(), wnd.mouse, wnd.kbd, timer, cam);
-
-
 
 	/*
 	theScene.drawScene(Scene::GRAPHIC_TYPE::OPENGL, wnd.GDIGfx(), wnd.Gfx(), wnd.GOpenGL(),
@@ -65,8 +64,8 @@ void App::populateScenes() {
 	const float width = .5f;
 
 	bool flag = true;
-	for (int i = 0; i < 8; i++) {// Lags at 50x50
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < 4; i++) {// Lags at 50x50
+		for (int j = 0; j < 4; j++) {
 			float x = i * height;
 			float y = j * width;
 			float z = 0;

@@ -1,6 +1,6 @@
 #pragma once
 //#include "RenderableMesh.h"
-#include "Camera.h"
+//#include "Camera.h"
 
 class AbstractGraphics {
 public:
@@ -14,7 +14,7 @@ public:
 
     //virtual void drawTriangle3D(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3) = 0;
 
-    virtual void setCamera(Camera* camera) = 0;
+    virtual void setCamera(class Camera* camera) = 0;
 
     virtual void drawString(std::string, float x, float y) = 0;
 

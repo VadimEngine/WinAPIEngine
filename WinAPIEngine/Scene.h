@@ -60,6 +60,8 @@ public:
     void setName(std::string theName);
 
 
+    void drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard);
+
     std::string toString();
     //void setGraphics
 

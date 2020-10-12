@@ -207,3 +207,65 @@ std::string Scene::toString() {
 void Scene::setName(std::string theName) {
 	this->name = theName;
 }
+
+void Scene::drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard) {
+	float dTheta = 1;
+	const float dt = 1.0f / 60.0f;
+	GLfloat cameraSpeed = 5.0f * 0.01;
+
+	if (keyboard.KeyIsPressed('W')) {
+		theCamera.moveForward(dt);
+		theCamera.cameraPos += cameraSpeed * theCamera.cameraFront;
+	}
+	if (keyboard.KeyIsPressed('A')) {
+		theCamera.pos.x -= dTheta * dt;
+		theCamera.cameraPos -= glm::normalize(glm::cross(theCamera.cameraFront, theCamera.cameraUp)) * cameraSpeed;
+	}
+	if (keyboard.KeyIsPressed('S')) {
+		theCamera.moveBack(dt);
+		theCamera.cameraPos -= cameraSpeed * theCamera.cameraFront;
+
+	}
+	if (keyboard.KeyIsPressed('D')) {
+		theCamera.pos.x += dTheta * dt;
+		theCamera.cameraPos += glm::normalize(glm::cross(theCamera.cameraFront, theCamera.cameraUp)) * cameraSpeed;
+	}
+
+	if (keyboard.KeyIsPressed(VK_LEFT)) {
+		theCamera.dir.y += dTheta * dt;
+	}
+	if (keyboard.KeyIsPressed(VK_RIGHT)) {
+		theCamera.dir.y -= dTheta * dt;
+	}
+	if (keyboard.KeyIsPressed(VK_UP)) {
+		theCamera.dir.x -= dTheta * dt;
+	}
+	if (keyboard.KeyIsPressed(VK_DOWN)) {
+		theCamera.dir.x += dTheta * dt;
+	}
+	if (keyboard.KeyIsPressed('Q')) {
+		theCamera.dir.z += dTheta * dt;
+	}
+	if (keyboard.KeyIsPressed('E')) {
+		theCamera.dir.z -= dTheta * dt;
+	}
+	
+	
+	//theGraphics->BeginFrame(0.07f, 0.0f, 0.12f);
+
+	theGraphics->setCamera(&theCamera);
+	theGraphics->startFrame();
+
+	//static float temp = math.
+	static CustomTimer timer;
+	const auto dt2 = timer.Peek() * 1.0f;
+	float temp = sin(dt);
+
+
+	for (int i = 0; i < renderableMeshes.size(); i++) {
+		theGraphics->drawMesh(renderableMeshes[i]);
+		//theGraphics->drawMesh(renderableMeshes[i], 0,0,0, dt2);
+	}
+
+	theGraphics->drawFrame();
+}
