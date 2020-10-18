@@ -131,11 +131,11 @@ void Scene::setUpScene() {
 	addMesh(RenderableMesh("Images\\ExportableFox.obj", 0xFF0000));
 }
 
-void Scene::render(AbstractGraphics* theGraphics, Mouse& mouse, Keyboard& keyboard) {
+void Scene::update(float dt, Mouse& mouse, Keyboard& keyboard) {
 	//poll events from mouse and keyboard
 
 	float dTheta = 1;
-	const float dt = 1.0f / 60.0f;
+	dt = 1.0f / 60.0f;
 	GLfloat cameraSpeed = 5.0f * 0.01;
 
 	if (keyboard.KeyIsPressed('W')) {
@@ -174,6 +174,10 @@ void Scene::render(AbstractGraphics* theGraphics, Mouse& mouse, Keyboard& keyboa
 	if (keyboard.KeyIsPressed('E')) {
 		theCamera.dir.z -= dTheta * dt;
 	}
+}
+
+void Scene::render(AbstractGraphics* theGraphics, Mouse& mouse, Keyboard& keyboard) {
+	//poll events from mouse and keyboard
 
 	//Draw
 	theGraphics->setCamera(&theCamera);
@@ -261,9 +265,10 @@ void Scene::drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard
 	const auto dt2 = timer.Peek() * 1.0f;
 	float temp = sin(dt);
 
+	theGraphics->drawImageTemp();
 
 	for (int i = 0; i < renderableMeshes.size(); i++) {
-		theGraphics->drawMesh(renderableMeshes[i]);
+		//theGraphics->drawMesh(renderableMeshes[i]);
 		//theGraphics->drawMesh(renderableMeshes[i], 0,0,0, dt2);
 	}
 

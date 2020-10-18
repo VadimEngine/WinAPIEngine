@@ -43,6 +43,8 @@ public:
 	void drawString(std::string, float x, float y);
 	std::string toString();
 
+	void drawImageTemp();
+
 
 private:
 	bool imguiEnabled = true;

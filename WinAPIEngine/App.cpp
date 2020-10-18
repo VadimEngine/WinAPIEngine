@@ -1,14 +1,14 @@
 #include "App.h"
 
-GDIPlusManager gdipm;
 
+GDIPlusManager gdipm;
 
 App::App()
 	: wnd(640, 480, "Custom Window"), theSceneD3d(wnd.Gfx()){
 
-	graphics.push_back(&wnd.GDIGfx());//custom
-	graphics.push_back(&wnd.GOpenGL());//opengl
-	graphics.push_back(&wnd.Gfx());//direct 3d
+	graphics.push_back(&wnd.GDIGfx());	// custom
+	graphics.push_back(&wnd.GOpenGL());	// openGL
+	graphics.push_back(&wnd.Gfx());		// direct 3d
 
 	graphicsIndex = 0;
 
@@ -40,8 +40,10 @@ void App::DoFrame() {
 	if (e.RightIsPressed()) {
 		sceneIndex = (sceneIndex + 1) % scenes.size();
 	}
-
-	scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
+	// update
+	scenes[sceneIndex].update(1.0f, wnd.mouse, wnd.kbd);
+	// draw
+	//scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
 
 	//scenes[sceneIndex].drawDirect3D(&wnd.Gfx(), wnd.mouse, wnd.kbd);
 
@@ -54,8 +56,6 @@ void App::DoFrame() {
 		wnd.mouse, wnd.kbd, timer, cam);
 	*/
 }
-
-
 
 void App::populateScenes() {
 	Scene scene1;
@@ -106,8 +106,7 @@ void App::populateScenes() {
 										glm::vec3(x, y + height, z) },
 					{ 0, 1, 2, 0 ,2, 3 }, rand()));
 
-			}
-			else {
+			} else {
 				//float randColor = static_cast <float> (rand()) / static_cast <float> (0xFFFFFF);
 				scene2.addMesh(RenderableMesh({ glm::vec3(x, y, z),
 										glm::vec3(x + width, y, z),

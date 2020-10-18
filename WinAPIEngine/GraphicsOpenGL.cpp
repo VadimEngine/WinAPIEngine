@@ -129,7 +129,7 @@ void GraphicsOpenGL::init() {
 		auto temp = glewGetErrorString(err);
 	}
 
-	// Define the viewport dimensions
+	// Define the viewPort dimensions
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	// Setup OpenGL options (Z-Buffer)
@@ -301,7 +301,7 @@ void GraphicsOpenGL::addVertices(std::vector<glm::vec3> vertices, vector<unsigne
 	}
 
 	for (int i = 0; i < indicies.size(); i++) {
-		//add indicies
+		//add indices
 		unsigned int newIndex = indicies[i] + oldSize;
 		theIndices.push_back(newIndex);
 	}
@@ -322,9 +322,9 @@ void GraphicsOpenGL::bindVertices() {
 }
 
 void GraphicsOpenGL::addMeshVerts(MeshGDI& inputMesh) {
-	unsigned int oldSize = theVertices.size()/6;//Divide by 6 becuase indices are for the 
-										      //begining of the "vertices" whihc consist of
-											  //x y z r g b
+	unsigned int oldSize = theVertices.size()/6;// Divide by 6 because indices are for the 
+												// beginning of the "vertices" which consist of
+												// x y z r g b
 
 	for (int i = 0; i < inputMesh.vertices.size(); i++) {
 		//add coordinate

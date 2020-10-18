@@ -59,10 +59,15 @@ public:
 
     void setName(std::string theName);
 
+    void update(float dt, Mouse& mouse, Keyboard& keyboard);
 
     void drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard);
 
+
+
     std::string toString();
+
+
     //void setGraphics
 
     //render(AbstractGrapics)
