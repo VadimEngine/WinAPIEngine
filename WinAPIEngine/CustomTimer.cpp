@@ -1,6 +1,5 @@
 #include "CustomTimer.h"
 
-//Replace with includes?
 using namespace std::chrono;
 
 CustomTimer::CustomTimer() noexcept {

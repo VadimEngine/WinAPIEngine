@@ -4,7 +4,6 @@
 #include <sstream>
 #include <iomanip>
 
-
 class WindowMessageMap {
 public:
 	WindowMessageMap();
