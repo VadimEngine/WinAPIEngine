@@ -13,7 +13,7 @@ The window that the application in drawn is a Win32 API window using the windows
 
 A scene drawn using the Custom Rendering library
 
-![OpenGL](./Screenshots/OpenGl2.png)
+![OpenGL](./Screenshots/OpenGL2.png)
 
 A scene drawn using the OpenGL Rendering Library
 
