@@ -265,12 +265,46 @@ void Scene::drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard
 	const auto dt2 = timer.Peek() * 1.0f;
 	float temp = sin(dt);
 
-	theGraphics->drawImageTemp();
 
+	float camAngle = theCamera.cameraFront.x;
+	float camX = theCamera.cameraPos.x;
+	float camY = theCamera.cameraPos.y;
+	float camZ = theCamera.cameraPos.z;
+
+
+	//theGraphics->drawImageTemp(camAngle, camX, camZ);
+
+	std::string theString = "Direct3D";
+
+	float x = 0;
+	float y = 0;
+
+	x = (x - (640.0f / 2.0f)) / (640.0f / 2.0f);
+	y = -(y - (480.0f / 2.0f)) / (480 / 2.0f);
+
+	/*
+	for (int i = 0; i < theString.size(); i++) {
+		//if (charKeyMap.find(theString[i]) != charKeyMap.end()) {
+			//glm::vec2 charLoc = charKeyMap[theString[i]];
+		theGraphics->drawSubImage2(x + i * .55f, y, 0, 0,
+			i, 0, 6, 8);
+		//}
+	}
+	*/
+	/*
+	theGraphics->drawSubImage2(0, 0, 0, 0,
+							 1, 1,
+							 6, 8);
+	*/
 	for (int i = 0; i < renderableMeshes.size(); i++) {
-		//theGraphics->drawMesh(renderableMeshes[i]);
+		theGraphics->drawMesh(renderableMeshes[i]);
 		//theGraphics->drawMesh(renderableMeshes[i], 0,0,0, dt2);
 	}
+
+	//draw without rotation
+	theGraphics->drawString(theString, 0, 0);//-1, .8
+
+	//theGraphics->drawImage();
 
 	theGraphics->drawFrame();
 }

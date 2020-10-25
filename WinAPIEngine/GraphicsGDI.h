@@ -39,7 +39,7 @@ private:
 
 public:
 
-	//Add normolized/non-normalized drawing method
+	//Add normalized(-1 to 1 coords)/denormalized(exact pixel coords) drawing method
 	GraphicsGDI(HWND hWnd);
 	GraphicsGDI(const GraphicsGDI&) = delete;
 	GraphicsGDI& operator=(const GraphicsGDI&) = delete;

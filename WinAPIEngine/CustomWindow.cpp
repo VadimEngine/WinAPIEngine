@@ -153,7 +153,6 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return true;
     }
 
-    //ASSERT FAIL HERE
     const auto& imio = ImGui::GetIO();
     
     static WindowMessageMap mm;

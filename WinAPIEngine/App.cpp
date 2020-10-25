@@ -1,8 +1,5 @@
 #include "App.h"
 
-
-GDIPlusManager gdipm;
-
 App::App()
 	: wnd(640, 480, "Custom Window"), theSceneD3d(wnd.Gfx()){
 
@@ -43,7 +40,7 @@ void App::DoFrame() {
 	// update
 	scenes[sceneIndex].update(1.0f, wnd.mouse, wnd.kbd);
 	// draw
-	//scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
+	scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
 
 	//scenes[sceneIndex].drawDirect3D(&wnd.Gfx(), wnd.mouse, wnd.kbd);
 
