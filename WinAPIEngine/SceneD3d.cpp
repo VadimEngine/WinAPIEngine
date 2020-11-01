@@ -1,7 +1,7 @@
 #include "SceneD3d.h"
 
 
-SceneD3d::Factory::Factory(Graphics& gfx)
+SceneD3d::Factory::Factory(GraphicsD3D& gfx)
 	:gfx(gfx) {
 }
 
@@ -38,7 +38,7 @@ std::unique_ptr<Drawable> SceneD3d::Factory::operator()() {
 	}
 }
 
-SceneD3d::SceneD3d(Graphics& d3d) {
+SceneD3d::SceneD3d(GraphicsD3D& d3d) {
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ d3d });
 
@@ -49,7 +49,7 @@ SceneD3d::SceneD3d(Graphics& d3d) {
 }
 
 
-void SceneD3d::render(Graphics& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& theCam) {
+void SceneD3d::render(GraphicsD3D& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& theCam) {
 	const auto dt = timer.Mark() * speed_factor;
 
 	d3d.BeginFrame(0.07f, 0.0f, 0.12f);

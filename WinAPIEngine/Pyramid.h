@@ -1,10 +1,9 @@
 #pragma once
 #include "DrawableBase.h"
 
-class Pyramid : public DrawableBase<Pyramid>
-{
+class Pyramid : public DrawableBase<Pyramid> {
 public:
-	Pyramid(Graphics& gfx, std::mt19937& rng,
+	Pyramid(GraphicsD3D& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

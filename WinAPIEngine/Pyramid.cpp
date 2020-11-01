@@ -3,7 +3,7 @@
 #include "Cone.h"
 
 
-Pyramid::Pyramid(Graphics& gfx,
+Pyramid::Pyramid(GraphicsD3D& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -19,14 +19,11 @@ Pyramid::Pyramid(Graphics& gfx,
 	dchi(odist(rng)),
 	chi(adist(rng)),
 	theta(adist(rng)),
-	phi(adist(rng))
-{
+	phi(adist(rng)) {
 	namespace dx = DirectX;
 
-	if (!IsStaticInitialized())
-	{
-		struct Vertex
-		{
+	if (!IsStaticInitialized()) {
+		struct Vertex {
 			dx::XMFLOAT3 pos;
 			struct
 			{
@@ -57,25 +54,21 @@ Pyramid::Pyramid(Graphics& gfx,
 
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
+		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied = {
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 			{ "Color",0,DXGI_FORMAT_R8G8B8A8_UNORM,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	}
-	else
-	{
+	} else {
 		SetIndexFromStatic();
 	}
 
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 }
 
-void Pyramid::Update(float dt) noexcept
-{
+void Pyramid::Update(float dt) noexcept {
 	roll += droll * dt;
 	pitch += dpitch * dt;
 	yaw += dyaw * dt;
@@ -84,8 +77,7 @@ void Pyramid::Update(float dt) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Pyramid::GetTransformXM() const noexcept
-{
+DirectX::XMMATRIX Pyramid::GetTransformXM() const noexcept {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		dx::XMMatrixTranslation(r, 0.0f, 0.0f) *

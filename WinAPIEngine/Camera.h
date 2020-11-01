@@ -11,9 +11,7 @@
 
 
 class Camera {
-
 public:
-
     glm::vec3 pos;
     glm::vec3 dir;
 
@@ -32,6 +30,6 @@ public:
 
     void moveForward(float dt);
 
-	void moveBack(float dt);
+    void moveBack(float dt);
 };
 

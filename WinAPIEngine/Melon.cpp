@@ -3,7 +3,7 @@
 #include "Sphere.h"
 
 
-Melon::Melon(Graphics& gfx,
+Melon::Melon(GraphicsD3D& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -21,20 +21,17 @@ Melon::Melon(Graphics& gfx,
 	dchi(odist(rng)),
 	chi(adist(rng)),
 	theta(adist(rng)),
-	phi(adist(rng))
-{
+	phi(adist(rng)) {
 	namespace dx = DirectX;
 
-	if (!IsStaticInitialized())
-	{
+	if (!IsStaticInitialized()) {
 		auto pvs = std::make_unique<VertexShader>(gfx, L"ColorIndexVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
 		AddStaticBind(std::make_unique<PixelShader>(gfx, L"ColorIndexPS.cso"));
 
-		struct PixelShaderConstants
-		{
+		struct PixelShaderConstants {
 			struct
 			{
 				float r;
@@ -43,8 +40,7 @@ Melon::Melon(Graphics& gfx,
 				float a;
 			} face_colors[8];
 		};
-		const PixelShaderConstants cb2 =
-		{
+		const PixelShaderConstants cb2 = {
 			{
 				{ 1.0f,1.0f,1.0f },
 				{ 1.0f,0.0f,0.0f },
@@ -58,8 +54,7 @@ Melon::Melon(Graphics& gfx,
 		};
 		AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
+		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied = {
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
@@ -67,8 +62,7 @@ Melon::Melon(Graphics& gfx,
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 
-	struct Vertex
-	{
+	struct Vertex {
 		dx::XMFLOAT3 pos;
 	};
 	auto model = Sphere::MakeTesselated<Vertex>(latdist(rng), longdist(rng));
@@ -82,8 +76,7 @@ Melon::Melon(Graphics& gfx,
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 }
 
-void Melon::Update(float dt) noexcept
-{
+void Melon::Update(float dt) noexcept {
 	roll += droll * dt;
 	pitch += dpitch * dt;
 	yaw += dyaw * dt;
@@ -92,8 +85,7 @@ void Melon::Update(float dt) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Melon::GetTransformXM() const noexcept
-{
+DirectX::XMMATRIX Melon::GetTransformXM() const noexcept {
 	namespace dx = DirectX;
 	return dx::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		dx::XMMatrixTranslation(r, 0.0f, 0.0f) *

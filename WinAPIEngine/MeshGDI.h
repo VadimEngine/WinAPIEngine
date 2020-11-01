@@ -21,7 +21,4 @@ public:
     MeshGDI(const char* path, int color, float scale);
 
     MeshGDI(std::vector<Vec3> vertices, std::vector<unsigned int> indicies, int color);
-
-
 };
-

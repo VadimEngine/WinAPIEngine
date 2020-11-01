@@ -1,8 +1,7 @@
 #pragma once
 #include "CustomWinHeader.h"
 
-class GDIPlusManager
-{
+class GDIPlusManager {
 public:
 	GDIPlusManager();
 	~GDIPlusManager();

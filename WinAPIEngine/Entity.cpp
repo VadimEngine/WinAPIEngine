@@ -2,9 +2,7 @@
 
 
 Entity::Entity(int x, int y, int width, int height)
-:x(x), y(y), height(height), width(width){
-
-}
+:x(x), y(y), height(height), width(width){}
 
 int Entity::getX() {
 	return x;

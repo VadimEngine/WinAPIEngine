@@ -1,10 +1,9 @@
 #pragma once
 #include "DrawableBase.h"
 
-class SkinnedBox : public DrawableBase<SkinnedBox>
-{
+class SkinnedBox : public DrawableBase<SkinnedBox> {
 public:
-	SkinnedBox(Graphics& gfx, std::mt19937& rng,
+	SkinnedBox(GraphicsD3D& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

@@ -61,8 +61,8 @@ void App::populateScenes() {
 	const float width = .5f;
 
 	bool flag = true;
-	for (int i = 0; i < 4; i++) {// Lags at 50x50
-		for (int j = 0; j < 4; j++) {
+	for (unsigned int i = 0; i < 4; i++) {// Lags at 50x50
+		for (unsigned int j = 0; j < 4; j++) {
 			float x = i * height;
 			float y = j * width;
 			float z = 0;
@@ -90,8 +90,8 @@ void App::populateScenes() {
 	scenes.push_back(scene1);
 	Scene scene2;
 	//Scene 2
-	for (int i = 0; i < 8; i++) {// Lags at 50x50
-		for (int j = 0; j < 8; j++) {
+	for (unsigned int i = 0; i < 8; i++) {// Lags at 50x50
+		for (unsigned int j = 0; j < 8; j++) {
 			float x = i * height;
 			float y = j * width;
 			float z = 0;

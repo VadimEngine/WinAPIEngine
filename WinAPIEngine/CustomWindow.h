@@ -10,7 +10,7 @@
 #include "WindowMessageMap.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "Graphics.h"
+#include "GraphicsD3D.h"
 #include "GraphicsGDI.h"
 #include "Entity.h"
 #include <objidl.h>
@@ -41,7 +41,7 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
-	std::unique_ptr<Graphics> pGfx;
+	std::unique_ptr<GraphicsD3D> pGfx;
 	//GDIgraphics
 	std::unique_ptr<GraphicsGDI> pGDI;
 	//opengl
@@ -57,7 +57,7 @@ public:
 	CustomWindow& operator=(const CustomWindow&) = delete;
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages();
-	Graphics& Gfx();
+	GraphicsD3D& Gfx();
 	GraphicsGDI& GDIGfx();
 	GraphicsOpenGL& GOpenGL();
 

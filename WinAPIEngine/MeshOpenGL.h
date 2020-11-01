@@ -14,9 +14,6 @@ class MeshOpenGL {
 
     std::vector<unsigned int> indices;
 
-    //contstructor to read file
-
-
-
+    //constructor to read file
 };
 

@@ -13,6 +13,4 @@ public:
 	Vec3(float x, float y, float z);
 
 	Vec3(glm::vec3 vec);
-
 };
-

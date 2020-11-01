@@ -15,7 +15,5 @@ public:
 	static Mat3 RotationX(float theta);
 
 	static Vec3 mutltply(Vec3 m0, Mat3 m1);
-
-
 };
 

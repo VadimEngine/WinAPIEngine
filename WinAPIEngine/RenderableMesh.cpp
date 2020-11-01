@@ -44,7 +44,7 @@ RenderableMesh::RenderableMesh(std::vector<glm::vec3> vertices, std::vector<unsi
 void RenderableMesh::renderOpenGL(GraphicsOpenGL& graphics, Camera cam) {
     unsigned int oldSize = graphics.theVertices.size() / 6;
 
-    for (int i = 0; i < vertices.size(); i++) {
+    for (unsigned int i = 0; i < vertices.size(); i++) {
         //add coordinate
         graphics.theVertices.push_back(vertices[i].x);
         graphics.theVertices.push_back(vertices[i].y);
@@ -52,27 +52,23 @@ void RenderableMesh::renderOpenGL(GraphicsOpenGL& graphics, Camera cam) {
         //add color
         //int theColor = inputMesh.color;
         int theColor = this->color;
-        float red = (theColor >> 16) & 0x000000FF;
-        float green = (theColor >> 8) & 0x000000FF;
-        float blue = (theColor) & 0x000000FF;
+        int red = (theColor >> 16) & 0x000000FF;
+        int green = (theColor >> 8) & 0x000000FF;
+        int blue = (theColor) & 0x000000FF;
 
-        red /= float(255.0f);
-        green /= float(255.0f);
-        blue /= float(255.0f);
-
-        graphics.theVertices.push_back(red);
-        graphics.theVertices.push_back(green);
-        graphics.theVertices.push_back(blue);
+        graphics.theVertices.push_back(red/255.0f);
+        graphics.theVertices.push_back(green/255.0f);
+        graphics.theVertices.push_back(blue/255.0f);
     }
 
-    for (int i = 0; i < indicies.size(); i++) {
+    for (unsigned int i = 0; i < indicies.size(); i++) {
         unsigned int newIndex = indicies[i] + oldSize;
         graphics.theIndices.push_back(newIndex);
     }
 }
 
 //renderDirect3D(graphics, Camera)
-void RenderableMesh::renderDirect3D(Graphics& graphics, Camera cam) {
+void RenderableMesh::renderDirect3D(GraphicsD3D& graphics, Camera cam) {
 
 }
 

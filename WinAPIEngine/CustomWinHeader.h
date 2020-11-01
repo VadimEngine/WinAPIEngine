@@ -1,9 +1,10 @@
 #pragma once
 
-#include <Windows.h>
 
 // Target Windows 7 or later
 #define _WIN32_WINNT 0x0601
+#define STRICT
+#include <Windows.h>
 #include <sdkddkver.h>
 //Disable detrimental windows logic
 #define NOGDICAPMASKS
@@ -40,6 +41,6 @@
 #define NOIMAGE
 #define NOTAPE
 
-#define STRICT
+
 
 

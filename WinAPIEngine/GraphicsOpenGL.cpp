@@ -3,9 +3,6 @@
 #include "RenderableMesh.h"
 #include <SOIL.h>
 
-
-
-
 GraphicsOpenGL::GraphicsOpenGL(HWND hWnd) {
 	this->hDC = GetDC(hWnd);
 
@@ -179,8 +176,6 @@ void GraphicsOpenGL::init() {
 }
 
 void GraphicsOpenGL::draw() {
-
-	//addMeshVerts(&theMesh);
 	bindVertices();
 
 	glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -197,8 +192,8 @@ void GraphicsOpenGL::draw() {
 	//update shader uniform
 	//float timeValue = glfwGetTime();
 	float timeValue = 1.0f;
-	float sinCalc = sin(timeValue) / 2.0 + 0.5f;
-	float cosCalc = cos(timeValue) / 2.0 + 0.5f;
+	float sinCalc = sin(timeValue) / 2.0f + 0.5f;
+	float cosCalc = cos(timeValue) / 2.0f + 0.5f;
 
 	int vertexColorLocation = glGetUniformLocation(ourShader->Program, "red_color");
 	//glUniform1f(vertexColorLocation, sinCalc);
@@ -211,7 +206,6 @@ void GraphicsOpenGL::draw() {
 
 	int shader_z_offset_loc = glGetUniformLocation(ourShader->Program, "z_offset");
 	//glUniform1f(shader_z_offset_loc, sinCalc);
-
 
 	GLint modelLoc = glGetUniformLocation(ourShader->Program, "model");
 	GLint viewLoc = glGetUniformLocation(ourShader->Program, "view");
@@ -268,13 +262,7 @@ void GraphicsOpenGL::draw() {
 	glDrawArrays(GL_TRIANGLES, 0, imageVertices.size() / 8);
 
 	glBindVertexArray(0);//Unbind
-
 	imageVertices.clear();
-
-
-
-
-
 
 	SwapBuffers(hDC);			/* nop if singlebuffered */
 
@@ -283,10 +271,10 @@ void GraphicsOpenGL::draw() {
 }
 
 
-void GraphicsOpenGL::addVertices(std::vector<glm::vec3> vertices, vector<unsigned int> indicies) {
+void GraphicsOpenGL::addVertices(std::vector<glm::vec3> vertices, std::vector<unsigned int> indicies) {
 	unsigned int oldSize = theVertices.size();
 	
-	for (int i = 0; i < vertices.size(); i++) {
+	for (unsigned int i = 0; i < vertices.size(); i++) {
 		//add coordinate
 		theVertices.push_back(vertices[i].x);
 		theVertices.push_back(vertices[i].y);
@@ -300,7 +288,7 @@ void GraphicsOpenGL::addVertices(std::vector<glm::vec3> vertices, vector<unsigne
 		theVertices.push_back(b);
 	}
 
-	for (int i = 0; i < indicies.size(); i++) {
+	for (unsigned int i = 0; i < indicies.size(); i++) {
 		//add indices
 		unsigned int newIndex = indicies[i] + oldSize;
 		theIndices.push_back(newIndex);
@@ -326,27 +314,23 @@ void GraphicsOpenGL::addMeshVerts(MeshGDI& inputMesh) {
 												// beginning of the "vertices" which consist of
 												// x y z r g b
 
-	for (int i = 0; i < inputMesh.vertices.size(); i++) {
+	for (unsigned int i = 0; i < inputMesh.vertices.size(); i++) {
 		//add coordinate
 		theVertices.push_back(inputMesh.vertices[i].x);
 		theVertices.push_back(inputMesh.vertices[i].y);
 		theVertices.push_back(inputMesh.vertices[i].z);
 		//add color
 		int theColor = inputMesh.color;
-		float red = (theColor >> 16) & 0x000000FF;
-		float green = (theColor >> 8) & 0x000000FF;
-		float blue = (theColor) & 0x000000FF;
+		int red = (theColor >> 16) & 0x000000FF;
+		int green = (theColor >> 8) & 0x000000FF;
+		int blue = (theColor) & 0x000000FF;
 
-		red /= float(255.0f);
-		green /= float(255.0f);
-		blue /= float(255.0f);
-
-		theVertices.push_back(red);
-		theVertices.push_back(green);
-		theVertices.push_back(blue);
+		theVertices.push_back(red/255.0f);
+		theVertices.push_back(green/255.0f);
+		theVertices.push_back(blue/255.0f);
 	}
 
-	for (int i = 0; i < inputMesh.indicies.size(); i++) {
+	for (unsigned int i = 0; i < inputMesh.indicies.size(); i++) {
 		unsigned int newIndex = inputMesh.indicies[i] + oldSize;
 		theIndices.push_back(newIndex);
 	}
@@ -363,8 +347,6 @@ void GraphicsOpenGL::setBackGroundColor(glm::vec4 theColor) {
 	this->backgroundColor = theColor;
 }
 
-
-
 void GraphicsOpenGL::startFrame() {
 	clearVertices();
 }
@@ -380,8 +362,6 @@ void GraphicsOpenGL::drawFrame() {
 	glm::mat4 view(1.0f);
 	//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	view = glm::lookAt(camera->cameraPos, camera->cameraPos + camera->cameraFront, camera->cameraUp);
-
-
 
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(fov, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
@@ -403,9 +383,6 @@ void GraphicsOpenGL::drawFrame() {
 	glDrawElements(GL_TRIANGLES, theIndices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
-
-
-
 
 	//draw image
 
@@ -444,18 +421,14 @@ void GraphicsOpenGL::drawFrame() {
 
 	glBindVertexArray(0);//Unbind
 
-
-
-
 	SwapBuffers(hDC);			/* nop if singlebuffered */
-
 	imageVertices.clear();
 }
 
 void GraphicsOpenGL::drawMesh(RenderableMesh& theMesh) {
 	unsigned int oldSize = theVertices.size() / 6;
 
-	for (int i = 0; i < theMesh.vertices.size(); i++) {
+	for (unsigned int i = 0; i < theMesh.vertices.size(); i++) {
 		//add coordinate
 		theVertices.push_back(theMesh.vertices[i].x);
 		theVertices.push_back(theMesh.vertices[i].y);
@@ -463,20 +436,16 @@ void GraphicsOpenGL::drawMesh(RenderableMesh& theMesh) {
 		//add color
 		//int theColor = inputMesh.color;
 		int theColor = theMesh.color;
-		float red = (theColor >> 16) & 0x000000FF;
-		float green = (theColor >> 8) & 0x000000FF;
-		float blue = (theColor) & 0x000000FF;
+		int red = (theColor >> 16) & 0x000000FF;
+		int green = (theColor >> 8) & 0x000000FF;
+		int blue = (theColor) & 0x000000FF;
 
-		red /= float(255.0f);
-		green /= float(255.0f);
-		blue /= float(255.0f);
-
-		theVertices.push_back(red);
-		theVertices.push_back(green);
-		theVertices.push_back(blue);
+		theVertices.push_back(red/255.0f);
+		theVertices.push_back(green/255.0f);
+		theVertices.push_back(blue/255.0f);
 	}
 
-	for (int i = 0; i < theMesh.indicies.size(); i++) {
+	for (unsigned int i = 0; i < theMesh.indicies.size(); i++) {
 		unsigned int newIndex = theMesh.indicies[i] + oldSize;
 		theIndices.push_back(newIndex);
 	}
@@ -499,7 +468,7 @@ void GraphicsOpenGL::drawString(std::string theString, float x, float y) {
 	y = -(y - (480.0f / 2.0f)) / (480 / 2.0f);
 
 
-	for (int i = 0; i < theString.size(); i++) {
+	for (unsigned int i = 0; i < theString.size(); i++) {
 		if (charKeyMap.find(theString[i]) != charKeyMap.end()) {
 			glm::vec2 charLoc = charKeyMap[theString[i]];
 			renderSubImage(x + i * .03f, y, charLoc.x, charLoc.y, 6, 8, image);
@@ -523,8 +492,6 @@ void GraphicsOpenGL::renderSubImage(float x, float y, float subX,
 	float height = (.08f / 2.0f) * size;
 	int texWidth = this->width;
 	int texHeight = this->height;
-
-
 
 	//add point 1 top left
 	imageVertices.push_back(position.x);

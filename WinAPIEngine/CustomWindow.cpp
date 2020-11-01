@@ -1,8 +1,5 @@
 #include "CustomWindow.h"
 #include "imgui/imgui_impl_win32.h"
-
-
-
 #pragma comment (lib,"Gdiplus.lib")
 
 
@@ -72,7 +69,7 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     );
     // show window
     ShowWindow(hWnd, SW_SHOWDEFAULT);
-    pGfx = std::make_unique<Graphics>(hWnd);
+    pGfx = std::make_unique<GraphicsD3D>(hWnd);
 
     // Init ImGui Win32 Impl
     ImGui_ImplWin32_Init(hWnd);
@@ -108,7 +105,7 @@ std::optional<int> CustomWindow::ProcessMessages() {
     return {};
 }
 
-Graphics& CustomWindow::Gfx() {
+GraphicsD3D& CustomWindow::Gfx() {
     return *pGfx;
 }
 
@@ -138,7 +135,6 @@ LRESULT CALLBACK CustomWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-
 LRESULT CALLBACK CustomWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     // retrieve ptr to window class
     CustomWindow* const pWnd = reinterpret_cast<CustomWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -147,9 +143,8 @@ LRESULT CALLBACK CustomWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam
 }
 
 LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
-    {
+
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam)) {
         return true;
     }
 
@@ -180,11 +175,11 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
             // stifle this keyboard message if imgui wants to capture
-            if (imio.WantCaptureKeyboard)
-            {
+            if (imio.WantCaptureKeyboard) {
                 break;
             }
-            if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled()) {// filter autorepeat
+            if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled()) {
+                // filter autorepeat
                 kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
             }
             break;
@@ -192,16 +187,14 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_KEYUP:
         case WM_SYSKEYUP:
             // stifle this keyboard message if imgui wants to capture
-            if (imio.WantCaptureKeyboard)
-            {
+            if (imio.WantCaptureKeyboard) {
                 break;
             }
             kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
             break;
         case WM_CHAR:
             // stifle this keyboard message if imgui wants to capture
-            if (imio.WantCaptureKeyboard)
-            {
+            if (imio.WantCaptureKeyboard) {
                 break;
             }
             kbd.OnChar(static_cast<unsigned char>(wParam));
@@ -209,8 +202,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
          /*********** END KEYBOARD MESSAGES ***********/
          /************* MOUSE MESSAGES ****************/
         case WM_MOUSEMOVE: {
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);
@@ -235,8 +227,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_LBUTTONDOWN: {
             SetForegroundWindow(hWnd);
             // stifle this mouse message if imgui wants to capture
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);
@@ -245,8 +236,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
         case WM_RBUTTONDOWN: {
             // stifle this mouse message if imgui wants to capture
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);
@@ -255,8 +245,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
         case WM_LBUTTONUP: {
             // stifle this mouse message if imgui wants to capture
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);
@@ -269,8 +258,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
         case WM_RBUTTONUP: {
             // stifle this mouse message if imgui wants to capture
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);
@@ -283,8 +271,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
         case WM_MOUSEWHEEL:  {
             // stifle this mouse message if imgui wants to capture
-            if (imio.WantCaptureMouse)
-            {
+            if (imio.WantCaptureMouse) {
                 break;
             }
             const POINTS pt = MAKEPOINTS(lParam);

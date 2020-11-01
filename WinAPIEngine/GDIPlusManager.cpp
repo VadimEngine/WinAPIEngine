@@ -2,8 +2,7 @@
 
 #include "GDIPlusManager.h"
 #include <algorithm>
-namespace Gdiplus
-{
+namespace Gdiplus {
 	using std::min;
 	using std::max;
 }
@@ -12,10 +11,8 @@ namespace Gdiplus
 ULONG_PTR GDIPlusManager::token = 0;
 int GDIPlusManager::refCount = 0;
 
-GDIPlusManager::GDIPlusManager()
-{
-	if (refCount++ == 0)
-	{
+GDIPlusManager::GDIPlusManager() {
+	if (refCount++ == 0) {
 		Gdiplus::GdiplusStartupInput input;
 		input.GdiplusVersion = 1;
 		input.DebugEventCallback = nullptr;
@@ -24,10 +21,8 @@ GDIPlusManager::GDIPlusManager()
 	}
 }
 
-GDIPlusManager::~GDIPlusManager()
-{
-	if (--refCount == 0)
-	{
+GDIPlusManager::~GDIPlusManager() {
+	if (--refCount == 0) {
 		Gdiplus::GdiplusShutdown(token);
 	}
 }

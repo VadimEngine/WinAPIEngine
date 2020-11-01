@@ -1,14 +1,13 @@
 #include "TransformCbuf.h"
 
-TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent)
+TransformCbuf::TransformCbuf(GraphicsD3D& gfx, const Drawable& parent)
 	: parent(parent) {
-	if (!pVcbuf)
-	{
+	if (!pVcbuf) {
 		pVcbuf = std::make_unique<VertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
 	}
 }
 
-void TransformCbuf::Bind(Graphics& gfx) noexcept {
+void TransformCbuf::Bind(GraphicsD3D& gfx) noexcept {
 	pVcbuf->Update(gfx,
 		DirectX::XMMatrixTranspose(
 			parent.GetTransformXM() *

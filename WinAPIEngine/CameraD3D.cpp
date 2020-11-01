@@ -3,24 +3,18 @@
 
 namespace dx = DirectX;
 
-DirectX::XMMATRIX CameraD3D::GetMatrix() const noexcept
-{
+DirectX::XMMATRIX CameraD3D::GetMatrix() const noexcept {
 	const auto pos = dx::XMVector3Transform(
 		dx::XMVectorSet(0.0f, 0.0f, -r, 0.0f),
 		dx::XMMatrixRotationRollPitchYaw(phi, -theta, 0.0f)
 	);
 	return dx::XMMatrixLookAtLH(
 		pos, dx::XMVectorZero(),
-		dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)
-	) * dx::XMMatrixRotationRollPitchYaw(
-		pitch, -yaw, roll
-	);
+		dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)) * dx::XMMatrixRotationRollPitchYaw(pitch, -yaw, roll);
 }
 
-void CameraD3D::SpawnControlWindow() noexcept
-{
-	if (ImGui::Begin("Camera"))
-	{
+void CameraD3D::SpawnControlWindow() noexcept {
+	if (ImGui::Begin("Camera")) {
 		ImGui::Text("Position");
 		ImGui::SliderFloat("R", &r, 0.0f, 80.0f, "%.1f");
 		ImGui::SliderAngle("Theta", &theta, -180.0f, 180.0f);
@@ -29,16 +23,14 @@ void CameraD3D::SpawnControlWindow() noexcept
 		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
 		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
 		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
-		if (ImGui::Button("Reset"))
-		{
+		if (ImGui::Button("Reset")) {
 			Reset();
 		}
 	}
 	ImGui::End();
 }
 
-void CameraD3D::Reset() noexcept
-{
+void CameraD3D::Reset() noexcept {
 	r = 20.0f;
 	theta = 0.0f;
 	phi = 0.0f;

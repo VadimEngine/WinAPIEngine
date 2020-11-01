@@ -3,12 +3,10 @@
 #include <DirectXMath.h>
 #include <initializer_list>
 
-class Cube
-{
+class Cube {
 public:
 	template<class V>
-	static IndexedTriangleList<V> Make()
-	{
+	static IndexedTriangleList<V> Make() {
 		namespace dx = DirectX;
 
 		constexpr float side = 1.0f / 2.0f;
@@ -35,8 +33,7 @@ public:
 		};
 	}
 	template<class V>
-	static IndexedTriangleList<V> MakeSkinned()
-	{
+	static IndexedTriangleList<V> MakeSkinned() {
 		namespace dx = DirectX;
 
 		constexpr float side = 1.0f / 2.0f;

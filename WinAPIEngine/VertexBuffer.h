@@ -4,7 +4,7 @@
 class VertexBuffer : public Bindable {
 public:
 	template<class V>
-	VertexBuffer(Graphics& gfx, const std::vector<V>& vertices)
+	VertexBuffer(GraphicsD3D& gfx, const std::vector<V>& vertices)
 		: stride(sizeof(V)) {
 
 		D3D11_BUFFER_DESC bd = {};
@@ -18,7 +18,7 @@ public:
 		sd.pSysMem = vertices.data();
 		GetDevice(gfx)->CreateBuffer(&bd, &sd, &pVertexBuffer);
 	}
-	void Bind(Graphics& gfx) noexcept override;
+	void Bind(GraphicsD3D& gfx) noexcept override;
 protected:
 	UINT stride;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;

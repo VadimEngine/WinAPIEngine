@@ -1,7 +1,6 @@
 #include "VertexShader.h"
 
-
-VertexShader::VertexShader(Graphics& gfx, const std::wstring& path) {
+VertexShader::VertexShader(GraphicsD3D& gfx, const std::wstring& path) {
 	D3DReadFileToBlob(path.c_str(), &pBytecodeBlob);
 	GetDevice(gfx)->CreateVertexShader(
 		pBytecodeBlob->GetBufferPointer(),
@@ -11,7 +10,7 @@ VertexShader::VertexShader(Graphics& gfx, const std::wstring& path) {
 	);
 }
 
-void VertexShader::Bind(Graphics& gfx) noexcept {
+void VertexShader::Bind(GraphicsD3D& gfx) noexcept {
 	GetContext(gfx)->VSSetShader(pVertexShader.Get(), nullptr, 0u);
 }
 
