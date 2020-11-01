@@ -1,10 +1,9 @@
 #pragma once
 #include "DrawableBase.h"
 
-class Sheet : public DrawableBase<Sheet>
-{
+class Sheet : public DrawableBase<Sheet> {
 public:
-	Sheet(Graphics& gfx, std::mt19937& rng,
+	Sheet(GraphicsD3D& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

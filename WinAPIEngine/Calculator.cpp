@@ -22,7 +22,6 @@ Vec3 Calculator::rotateAroundCenter(Vec3 coord, Vec3 center,
 
 	//offset?
 
-
 	return rot;
 }
 
@@ -46,7 +45,6 @@ Vec3 Calculator::rotateAroundCenter(Vec3 coord, Vec3 center, Vec3 direction) {
 	//divide by z/cam.near
 
 	//offset?
-
 
 	return rot;
 }

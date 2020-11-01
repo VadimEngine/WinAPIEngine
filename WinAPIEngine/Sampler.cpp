@@ -1,7 +1,6 @@
 #include "Sampler.h"
 
-Sampler::Sampler(Graphics& gfx)
-{
+Sampler::Sampler(GraphicsD3D& gfx) {
 	//INFOMAN(gfx);
 
 	D3D11_SAMPLER_DESC samplerDesc = {};
@@ -13,7 +12,6 @@ Sampler::Sampler(Graphics& gfx)
 	GetDevice(gfx)->CreateSamplerState(&samplerDesc, &pSampler);
 }
 
-void Sampler::Bind(Graphics& gfx) noexcept
-{
+void Sampler::Bind(GraphicsD3D& gfx) noexcept {
 	GetContext(gfx)->PSSetSamplers(0, 1, pSampler.GetAddressOf());
 }

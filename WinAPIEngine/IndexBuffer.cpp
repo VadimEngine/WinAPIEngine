@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices)
+IndexBuffer::IndexBuffer(GraphicsD3D& gfx, const std::vector<unsigned short>& indices)
 	: count((UINT)indices.size()) {
 
 	D3D11_BUFFER_DESC ibd = {};
@@ -15,7 +15,7 @@ IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indic
 	GetDevice(gfx)->CreateBuffer(&ibd, &isd, &pIndexBuffer);
 }
 
-void IndexBuffer::Bind(Graphics& gfx) noexcept {
+void IndexBuffer::Bind(GraphicsD3D& gfx) noexcept {
 	GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "GraphicsGDI.h"
-#include "Graphics.h"
+#include "GraphicsD3D.h"
 #include "GraphicsOpenGL.h"
 #include "Mouse.h"
 #include "Keyboard.h"
@@ -46,7 +46,7 @@ public:
 
     Scene();
 
-    void drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, Graphics& d3d,
+    void drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, GraphicsD3D& d3d,
         GraphicsOpenGL& gOpengl, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& cam);
 
     void setUpScene();
@@ -61,16 +61,12 @@ public:
 
     void update(float dt, Mouse& mouse, Keyboard& keyboard);
 
-    void drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard);
-
-
+    void drawDirect3D(GraphicsD3D* theGraphics, Mouse& mouse, Keyboard& keyboard);
 
     std::string toString();
-
 
     //void setGraphics
 
     //render(AbstractGrapics)
     //update/tick(inputs...)
 };
-

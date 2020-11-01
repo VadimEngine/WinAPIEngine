@@ -3,12 +3,10 @@
 #include <DirectXMath.h>
 #include "CustomMath.h"
 
-class Cone
-{
+class Cone {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(int longDiv)
-	{
+	static IndexedTriangleList<V> MakeTesselated(int longDiv) {
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
 
@@ -17,8 +15,7 @@ public:
 
 		// base vertices
 		std::vector<V> vertices;
-		for (int iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned int iLong = 0; iLong < longDiv; iLong++) {
 			vertices.emplace_back();
 			auto v = dx::XMVector3Transform(
 				base,
@@ -38,16 +35,14 @@ public:
 
 		// base indices
 		std::vector<unsigned short> indices;
-		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++) {
 			indices.push_back(iCenter);
 			indices.push_back((iLong + 1) % longDiv);
 			indices.push_back(iLong);
 		}
 
 		// cone indices
-		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++) {
 			indices.push_back(iLong);
 			indices.push_back((iLong + 1) % longDiv);
 			indices.push_back(iTip);
@@ -56,8 +51,7 @@ public:
 		return { std::move(vertices),std::move(indices) };
 	}
 	template<class V>
-	static IndexedTriangleList<V> Make()
-	{
+	static IndexedTriangleList<V> Make() {
 		return MakeTesselated<V>(24);
 	}
 };

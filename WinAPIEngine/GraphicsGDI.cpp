@@ -5,10 +5,9 @@
 #include <SOIL.h>
 
 
-
 GraphicsGDI::GraphicsGDI(HWND hWnd)
 : hWnd(hWnd), graphics(GetDC(hWnd)), colorBuffer(640, 480, PixelFormat32bppRGB),
-background_color(0xFFFFFF){
+background_color(0xFFFFFF) {
     image = SOIL_load_image("Images\\font.png", &width, &height, 0, SOIL_LOAD_RGBA);
 
     charKeyMap.insert({ 'A', glm::vec2(0,0) });
@@ -79,16 +78,13 @@ background_color(0xFFFFFF){
     charKeyMap.insert({ '8', glm::vec2(8,2) });
     charKeyMap.insert({ '9', glm::vec2(9,2) });
     charKeyMap.insert({ ':', glm::vec2(14,2) });
-
-
-
 }
 
 GraphicsGDI::~GraphicsGDI() {}
 
 void GraphicsGDI::renderFillRectangle(int x, int y, int width, int height) {
-    for (int i = x; i < x + width; i++) {
-        for (int j = y; j < y + height; j++) {
+    for (unsigned int i = x; i < x + width; i++) {
+        for (unsigned int j = y; j < y + height; j++) {
             setPixel(i,j, 0x0000FF);
         }
     }
@@ -98,8 +94,8 @@ void GraphicsGDI::startFrame() {
     colorBuffer.LockBits(&Gdiplus::Rect(0, 0, 640, 480), Gdiplus::ImageLockMode::ImageLockModeWrite, PixelFormat32bppRGB, &bitmapData);
     pRawBitmapOrig = (unsigned int*)bitmapData.Scan0;
     //Clear frame
-    for (int i = 0; i < 640; i++) {
-        for (int j = 0; j < 480; j++) {
+    for (unsigned int i = 0; i < 640; i++) {
+        for (unsigned int j = 0; j < 480; j++) {
             //Stride is number of bytes needed to store one row of the bitmap
             int index = j * bitmapData.Stride / 4 + i;
             pRawBitmapOrig[index] = 0x000000;
@@ -121,8 +117,9 @@ void GraphicsGDI::setPixel(int x, int y, unsigned int color) {
         pRawBitmapOrig[index] = color;
     }
 }
+
 void GraphicsGDI::drawLine(Vec2 v0, Vec2 v1, unsigned int color) {
-    if (!inbound(v0.x, v0.y) || !inbound(v1.x, v1.y)) {
+    if (!inbound((int)v0.x, (int)v0.y) || !inbound((int)v1.x, (int)v1.y)) {
         return;
     }
     int x1 = (int)v0.x;
@@ -372,7 +369,7 @@ void GraphicsGDI::drawFrame() {
 
 void GraphicsGDI::drawMesh(RenderableMesh& theMesh) {
     float scale = 1;
-    for (int i = 0; i < theMesh.indicies.size(); i += 3) {
+    for (unsigned int i = 0; i < theMesh.indicies.size(); i += 3) {
         unsigned int i1 = theMesh.indicies[i];
         unsigned int i2 = theMesh.indicies[i + 1];
         unsigned int i3 = theMesh.indicies[i + 2];
@@ -403,7 +400,7 @@ std::string GraphicsGDI::toString() {
 
 
 void GraphicsGDI::drawString(std::string theString, float x, float y) {
-    for (int i = 0; i < theString.size(); i++) {
+    for (unsigned int i = 0; i < theString.size(); i++) {
         if (theString[i] != ' ') {
             glm::vec2 charLoc = charKeyMap[theString[i]];
             renderSubImage(x + i*7, y, charLoc.x * 6, charLoc.y * 8, 6, 8, image);
@@ -414,8 +411,8 @@ void GraphicsGDI::drawString(std::string theString, float x, float y) {
 
 void GraphicsGDI::renderImage(float x, float y) {
     //draw image at x,y
-    for (int texY = 0; texY < height; texY++) {
-        for (int texX = 0; texX < width; texX++) {
+    for (unsigned int texY = 0; texY < height; texY++) {
+        for (unsigned int texX = 0; texX < width; texX++) {
             const unsigned int index = texX + (texY * width);
 
             const unsigned int color = ((int*)image)[index];
@@ -428,8 +425,8 @@ void GraphicsGDI::renderImage(float x, float y) {
 void GraphicsGDI::renderSubImage(float x, float y, float subX, float subY,
                                  float subWidth, float subHeight, unsigned char* theImage) {
     //treat 0xFF00FF as alpha
-    for (int texY = subY; texY < subY + subHeight; texY++) {
-        for (int texX = subX; texX < subX + subWidth; texX++) {
+    for (unsigned int texY = subY; texY < subY + subHeight; texY++) {
+        for (unsigned int texX = subX; texX < subX + subWidth; texX++) {
             const unsigned int index = texX + (texY * width);
 
             const unsigned int color = ((int*)theImage)[index];

@@ -3,12 +3,10 @@
 #include <DirectXMath.h>
 #include "CustomMath.h"
 
-class Prism
-{
+class Prism {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(int longDiv)
-	{
+	static IndexedTriangleList<V> MakeTesselated(int longDiv) {
 		namespace dx = DirectX;
 		assert(longDiv >= 3);
 
@@ -27,8 +25,7 @@ public:
 		const auto iCenterFar = (unsigned short)(vertices.size() - 1);
 
 		// base vertices
-		for (int iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned int iLong = 0; iLong < longDiv; iLong++) {
 			// near base
 			{
 				vertices.emplace_back();
@@ -52,8 +49,7 @@ public:
 
 		// side indices
 		std::vector<unsigned short> indices;
-		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++) {
 			const auto i = iLong * 2;
 			const auto mod = longDiv * 2;
 			indices.push_back(i + 2);
@@ -65,8 +61,7 @@ public:
 		}
 
 		// base indices
-		for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-		{
+		for (unsigned short iLong = 0; iLong < longDiv; iLong++) {
 			const auto i = iLong * 2;
 			const auto mod = longDiv * 2;
 			indices.push_back(i + 2);
@@ -80,8 +75,7 @@ public:
 		return { std::move(vertices),std::move(indices) };
 	}
 	template<class V>
-	static IndexedTriangleList<V> Make()
-	{
+	static IndexedTriangleList<V> Make() {
 		return MakeTesselated<V>(24);
 	}
 };

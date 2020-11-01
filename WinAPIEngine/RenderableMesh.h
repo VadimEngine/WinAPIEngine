@@ -7,7 +7,7 @@
 
 #include "GraphicsOpenGL.h"
 //Direct3D
-#include "Graphics.h"
+#include "GraphicsD3D.h"
 
 #include "Camera.h"
 
@@ -16,9 +16,6 @@
 
 class RenderableMesh {
 public:
-
-
-
     std::vector<glm::vec3> vertices;
     std::vector<unsigned int> indicies;
     int color;
@@ -36,7 +33,7 @@ public:
     void renderOpenGL(GraphicsOpenGL& graphics, Camera cam);
 
     //renderDirect3D(graphics, Camera)
-    void renderDirect3D(Graphics& graphics, Camera cam);
+    void renderDirect3D(GraphicsD3D& graphics, Camera cam);
 
     //renderCustom(Graphics, Camera)
     //void renderCustom(GraphicsGDI& graphics, Camera cam);

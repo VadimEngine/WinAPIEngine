@@ -1,11 +1,10 @@
 #pragma once
 #include "Bindable.h"
 
-class Sampler : public Bindable
-{
+class Sampler : public Bindable {
 public:
-	Sampler(Graphics& gfx);
-	void Bind(Graphics& gfx) noexcept override;
+	Sampler(GraphicsD3D& gfx);
+	void Bind(GraphicsD3D& gfx) noexcept override;
 protected:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
 };

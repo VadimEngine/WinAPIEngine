@@ -171,7 +171,7 @@
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GDIPlusManager.cpp" />
-    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GraphicsD3D.cpp" />
     <ClCompile Include="GraphicsGDI.cpp" />
     <ClCompile Include="ImguiManager.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -188,6 +188,7 @@
     <ClCompile Include="MeshGDI.cpp" />
     <ClCompile Include="MeshOpenGL.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PipelineD3D.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="GraphicsOpenGL.cpp" />
@@ -231,7 +232,7 @@
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GDIPlusManager.h" />
-    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsD3D.h" />
     <ClInclude Include="GraphicsGDI.h" />
     <ClInclude Include="ImguiManager.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="MeshGDI.h" />
     <ClInclude Include="MeshOpenGL.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PipelineD3D.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Prism.h" />

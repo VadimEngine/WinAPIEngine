@@ -41,7 +41,6 @@ public:
     std::vector<GLuint> theIndices;
     GLuint VBO, VAO, EBO;
 
-
     GLuint imageVAO, imageVBO;
 
     GLuint texture;
@@ -58,8 +57,6 @@ public:
     unsigned char* image;
     int width, height;
 
-
-
     //Needs to take a windows HDC so it can swap buffers
     GraphicsOpenGL(HWND hWnd);
 
@@ -71,7 +68,7 @@ public:
 
     //void draw(Camera);
 
-    void addVertices(std::vector<glm::vec3> vertices, vector<unsigned int> indicies);
+    void addVertices(std::vector<glm::vec3> vertices, std::vector<unsigned int> indicies);
 
     void bindVertices();
 
@@ -84,7 +81,6 @@ public:
     //method that extends from abstract class to take in simple vector<float> and vector<unsinged int> and convert to openGL format
 
     //void setShader();
-
 
     void startFrame();
     void drawFrame();
@@ -100,6 +96,4 @@ public:
     void renderSubImage(float x, float y, float subX,
         float subY, float subWidth,
         float subHeight, unsigned char* theImage);
-
 };
-

@@ -153,9 +153,6 @@
     <ClCompile Include="GDIPlusManager.cpp">
       <Filter>Source Files\Direct3D</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files\Direct3D</Filter>
-    </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -212,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="SceneD3d.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineD3D.cpp">
+      <Filter>Source Files\Direct3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsD3D.cpp">
+      <Filter>Source Files\Direct3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -359,9 +362,6 @@
     <ClInclude Include="GDIPlusManager.h">
       <Filter>Header Files\Direct3D</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files\Direct3D</Filter>
-    </ClInclude>
     <ClInclude Include="WindowMessageMap.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
@@ -409,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="AbstractScene.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineD3D.h">
+      <Filter>Header Files\Direct3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsD3D.h">
+      <Filter>Header Files\Direct3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

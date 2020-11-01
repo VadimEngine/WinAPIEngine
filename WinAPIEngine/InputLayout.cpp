@@ -1,6 +1,6 @@
 #include "InputLayout.h"
 
-InputLayout::InputLayout(Graphics& gfx,
+InputLayout::InputLayout(GraphicsD3D& gfx,
 						 const std::vector<D3D11_INPUT_ELEMENT_DESC>& layout,
 						 ID3DBlob* pVertexShaderBytecode) {
 	GetDevice(gfx)->CreateInputLayout(
@@ -11,6 +11,6 @@ InputLayout::InputLayout(Graphics& gfx,
 	);
 }
 
-void InputLayout::Bind(Graphics& gfx) noexcept {
+void InputLayout::Bind(GraphicsD3D& gfx) noexcept {
 	GetContext(gfx)->IASetInputLayout(pInputLayout.Get());
 }

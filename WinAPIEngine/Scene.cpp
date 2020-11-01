@@ -3,13 +3,12 @@
 
 int Scene::SceneCount = 0;
 
-
 Scene::Scene() {
 	//setUpScene();
 	this->name = "Scene " + std::to_string(SceneCount++);
 }
 
-void Scene::drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, Graphics& d3d,
+void Scene::drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, GraphicsD3D& d3d,
 	GraphicsOpenGL& gOpengl, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& theCam) {
 
 	switch (graphicType) {
@@ -57,7 +56,7 @@ void Scene::drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, Graphics& d3d,
 			
 			//renderable.renderCustom(gdi, theCam);
 
-			for (int i = 0; i < renderableMeshes.size(); i++) {
+			for (unsigned int i = 0; i < renderableMeshes.size(); i++) {
 				//renderableMeshes[i].renderCustom(gdi, theCam);
 				gdi.drawMesh(renderableMeshes[i]);
 			}
@@ -83,7 +82,7 @@ void Scene::drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, Graphics& d3d,
 		gOpengl.startFrame();
 
 		//renderable.renderOpenGL(gOpengl, theCam);
-		for (int i = 0; i < renderableMeshes.size(); i++) {
+		for (unsigned int i = 0; i < renderableMeshes.size(); i++) {
 			//renderableMeshes[i].renderOpenGL(gOpengl, theCam);
 			gOpengl.drawMesh(renderableMeshes[i]);
 		}
@@ -103,8 +102,8 @@ void Scene::setUpScene() {
 	const float width = .5f;
 
 	bool flag = true;
-	for (int i = 0; i < 8; i++) {// Lags at 50x50
-		for (int j = 0; j < 8; j++) {
+	for (unsigned int i = 0; i < 8; i++) {// Lags at 50x50
+		for (unsigned int j = 0; j < 8; j++) {
 			float x = i * height;
 			float y = j * width;
 			float z = 0;
@@ -183,7 +182,7 @@ void Scene::render(AbstractGraphics* theGraphics, Mouse& mouse, Keyboard& keyboa
 	theGraphics->setCamera(&theCamera);
 	theGraphics->startFrame();
 
-	for (int i = 0; i < renderableMeshes.size(); i++) {
+	for (unsigned int i = 0; i < renderableMeshes.size(); i++) {
 		theGraphics->drawMesh(renderableMeshes[i]);
 	}
 
@@ -212,7 +211,7 @@ void Scene::setName(std::string theName) {
 	this->name = theName;
 }
 
-void Scene::drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard) {
+void Scene::drawDirect3D(GraphicsD3D* theGraphics, Mouse& mouse, Keyboard& keyboard) {
 	float dTheta = 1;
 	const float dt = 1.0f / 60.0f;
 	GLfloat cameraSpeed = 5.0f * 0.01;
@@ -282,21 +281,8 @@ void Scene::drawDirect3D(Graphics* theGraphics, Mouse& mouse, Keyboard& keyboard
 	x = (x - (640.0f / 2.0f)) / (640.0f / 2.0f);
 	y = -(y - (480.0f / 2.0f)) / (480 / 2.0f);
 
-	/*
-	for (int i = 0; i < theString.size(); i++) {
-		//if (charKeyMap.find(theString[i]) != charKeyMap.end()) {
-			//glm::vec2 charLoc = charKeyMap[theString[i]];
-		theGraphics->drawSubImage2(x + i * .55f, y, 0, 0,
-			i, 0, 6, 8);
-		//}
-	}
-	*/
-	/*
-	theGraphics->drawSubImage2(0, 0, 0, 0,
-							 1, 1,
-							 6, 8);
-	*/
-	for (int i = 0; i < renderableMeshes.size(); i++) {
+
+	for (unsigned int i = 0; i < renderableMeshes.size(); i++) {
 		theGraphics->drawMesh(renderableMeshes[i]);
 		//theGraphics->drawMesh(renderableMeshes[i], 0,0,0, dt2);
 	}

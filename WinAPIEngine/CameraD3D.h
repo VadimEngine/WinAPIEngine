@@ -1,8 +1,7 @@
 #pragma once
-#include "Graphics.h"
+#include "GraphicsD3D.h"
 
-class CameraD3D
-{
+class CameraD3D {
 public:
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWindow() noexcept;

@@ -192,8 +192,7 @@ WindowMessageMap::WindowMessageMap()
 		REGISTER_MESSAGE(WM_UAHDESTROYWINDOW),
 		REGISTER_MESSAGE(WM_DWMNCRENDERINGCHANGED),
 		REGISTER_MESSAGE(WM_ENTERSIZEMOVE),
-		})
-{}
+		}) {}
 
 
 std::string WindowMessageMap::operator()(DWORD msg, LPARAM lp, WPARAM wp) const {

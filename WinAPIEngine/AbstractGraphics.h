@@ -19,6 +19,4 @@ public:
     virtual void drawString(std::string, float x, float y) = 0;
 
     virtual std::string toString() = 0;
-
 };
-

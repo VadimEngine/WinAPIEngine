@@ -11,7 +11,7 @@ MeshGDI::MeshGDI(const char* path): MeshGDI(path, 0x000000, 1.0f) {}
 MeshGDI::MeshGDI(const char* path, int color) : MeshGDI(path, color, 1.0f) {}
 
 
-MeshGDI::MeshGDI(const char* path, int color, float scale){
+MeshGDI::MeshGDI(const char* path, int color, float scale) {
     this->color = color;
     std::ifstream myfile(path);
 

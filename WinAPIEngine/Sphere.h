@@ -3,12 +3,10 @@
 #include <DirectXMath.h>
 #include "CustomMath.h"
 
-class Sphere
-{
+class Sphere {
 public:
 	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(int latDiv, int longDiv)
-	{
+	static IndexedTriangleList<V> MakeTesselated(int latDiv, int longDiv) {
 		namespace dx = DirectX;
 		assert(latDiv >= 3);
 		assert(longDiv >= 3);
@@ -19,14 +17,12 @@ public:
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
 		std::vector<V> vertices;
-		for (int iLat = 1; iLat < latDiv; iLat++)
-		{
+		for (unsigned int iLat = 1; iLat < latDiv; iLat++) {
 			const auto latBase = dx::XMVector3Transform(
 				base,
 				dx::XMMatrixRotationX(lattitudeAngle * iLat)
 			);
-			for (int iLong = 0; iLong < longDiv; iLong++)
-			{
+			for (unsigned int iLong = 0; iLong < longDiv; iLong++) {
 				vertices.emplace_back();
 				auto v = dx::XMVector3Transform(
 					latBase,
@@ -47,10 +43,8 @@ public:
 		const auto calcIdx = [latDiv, longDiv](unsigned short iLat, unsigned short iLong)
 		{ return iLat * longDiv + iLong; };
 		std::vector<unsigned short> indices;
-		for (unsigned short iLat = 0; iLat < latDiv - 2; iLat++)
-		{
-			for (unsigned short iLong = 0; iLong < longDiv - 1; iLong++)
-			{
+		for (unsigned short iLat = 0; iLat < latDiv - 2; iLat++) {
+			for (unsigned short iLong = 0; iLong < longDiv - 1; iLong++) {
 				indices.push_back(calcIdx(iLat, iLong));
 				indices.push_back(calcIdx(iLat + 1, iLong));
 				indices.push_back(calcIdx(iLat, iLong + 1));
@@ -68,8 +62,7 @@ public:
 		}
 
 		// cap fans
-		for (unsigned short iLong = 0; iLong < longDiv - 1; iLong++)
-		{
+		for (unsigned short iLong = 0; iLong < longDiv - 1; iLong++) {
 			// north
 			indices.push_back(iNorthPole);
 			indices.push_back(calcIdx(0, iLong));
@@ -91,9 +84,9 @@ public:
 
 		return { std::move(vertices),std::move(indices) };
 	}
+
 	template<class V>
-	static IndexedTriangleList<V> Make()
-	{
+	static IndexedTriangleList<V> Make() {
 		return MakeTesselated<V>(12, 24);
 	}
 };
