@@ -289,8 +289,12 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
+void CustomWindow::printMessage(std::string theMessage) {
+    std::stringstream ss;
+    ss << theMessage << std::endl;
+    OutputDebugString(ss.str().c_str());
+}
 
-HDC CustomWindow::getDeviceContext() {
-    //return nullptr;
+HDC CustomWindow::getDeviceContext() {    
     return GetDC(hWnd);
 }

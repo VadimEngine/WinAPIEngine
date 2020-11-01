@@ -9,8 +9,6 @@ PipelineD3D::PipelineD3D(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11Device> 
         pvs = std::make_unique<VertexShader>(gfx, L"TextureVS.cso");
         pps = std::make_unique<PixelShader>(gfx, L"TexturePS.cso");
 
-        pvsBC = pvs->GetBytecode();
-
         // pass this in
         const D3D11_INPUT_ELEMENT_DESC ied[] = {
             //"position" match in vertex shader
@@ -18,7 +16,7 @@ PipelineD3D::PipelineD3D(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11Device> 
             {"TexCoord", 0, DXGI_FORMAT_R32G32_FLOAT,0,12 ,D3D11_INPUT_PER_VERTEX_DATA,0}
         };
 
-        pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pvsBC->GetBufferPointer(), pvsBC->GetBufferSize(), &pInputLayout);
+        pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pvs->GetBytecode()->GetBufferPointer(), pvs->GetBytecode()->GetBufferSize(), &pInputLayout);
 
         D3D11_TEXTURE2D_DESC textureDesc = {};
         textureDesc.Width = theSurface.GetWidth();
@@ -63,8 +61,6 @@ PipelineD3D::PipelineD3D(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11Device> 
         pvs = std::make_unique<VertexShader>(gfx, L"LearningVS.cso");
         pps = std::make_unique<PixelShader>(gfx, L"LearningPS.cso");
 
-        pvsBC = pvs->GetBytecode();
-
         const D3D11_INPUT_ELEMENT_DESC ied[] = {
             //"position" match in vertex shader
             {"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -72,13 +68,13 @@ PipelineD3D::PipelineD3D(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11Device> 
             //DXGI_FORMAT_R32G32_FLOAT
         };
 
-        pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pvsBC->GetBufferPointer(), pvsBC->GetBufferSize(), &pInputLayout);
+        pDevice->CreateInputLayout(ied, (UINT)std::size(ied), pvs->GetBytecode()->GetBufferPointer(), pvs->GetBytecode()->GetBufferSize(), &pInputLayout);
     }
 }
 
 void PipelineD3D::bind(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext) {
     if (isTexture) {
-        //bind vertex shader
+        //bind pixel shader
         pps->Bind(gfx);
         //bind vertex shader
         pvs->Bind(gfx);
@@ -87,22 +83,12 @@ void PipelineD3D::bind(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11DeviceCont
         // Set primitive topology to triangle list (groups of 3 vertices)
         pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-        //configure viewport
-        D3D11_VIEWPORT vp;
-        vp.Width = 640;
-        vp.Height = 480;
-        vp.MinDepth = 0;
-        vp.MaxDepth = 1;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        pContext->RSSetViewports(1u, &vp);
-
-        //Bind Texture to Pixel shader
+        // bind Texture to Pixel shader
         pContext->PSSetShaderResources(0u, 1u, pTextureView.GetAddressOf());
-
+        // bind sampler
         pContext->PSSetSamplers(0, 1, pSampler.GetAddressOf());
     } else {
-        //bind vertex shader
+        //bind pixel shader
         pps->Bind(gfx);
         //bind vertex shader
         pvs->Bind(gfx);
@@ -110,15 +96,5 @@ void PipelineD3D::bind(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11DeviceCont
         pContext->IASetInputLayout(pInputLayout.Get());
         // Set primitive topology to triangle list (groups of 3 vertices)
         pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-        //configure viewport
-        D3D11_VIEWPORT vp;
-        vp.Width = 640;
-        vp.Height = 480;
-        vp.MinDepth = 0;
-        vp.MaxDepth = 1;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        pContext->RSSetViewports(1u, &vp);
     }
 }

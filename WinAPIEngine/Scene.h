@@ -33,21 +33,12 @@
 class Scene {
 
 public:
-    //DONT NEED THIS ANYMORE. REMOV
-    //CAN BE USED IN A SET OF SUPPORTS
-    enum class GRAPHIC_TYPE {
-        DIRECT3D, CUSTOM, OPENGL
-    };
-public:
     Camera theCamera;
     std::vector<RenderableMesh> renderableMeshes;
     std::string name;
     static int SceneCount;
 
     Scene();
-
-    void drawScene(GRAPHIC_TYPE graphicType, GraphicsGDI& gdi, GraphicsD3D& d3d,
-        GraphicsOpenGL& gOpengl, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& cam);
 
     void setUpScene();
 
@@ -61,12 +52,5 @@ public:
 
     void update(float dt, Mouse& mouse, Keyboard& keyboard);
 
-    void drawDirect3D(GraphicsD3D* theGraphics, Mouse& mouse, Keyboard& keyboard);
-
     std::string toString();
-
-    //void setGraphics
-
-    //render(AbstractGrapics)
-    //update/tick(inputs...)
 };

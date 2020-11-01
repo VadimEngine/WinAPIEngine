@@ -2,7 +2,6 @@
 
 App::App()
 	: wnd(640, 480, "Custom Window"), theSceneD3d(wnd.Gfx()){
-
 	graphics.push_back(&wnd.GDIGfx());	// custom
 	graphics.push_back(&wnd.GOpenGL());	// openGL
 	graphics.push_back(&wnd.Gfx());		// direct 3d
@@ -27,6 +26,12 @@ int App::Go() {
 }
 
 void App::DoFrame() {
+	//calculate DT
+	float dt = timer.Mark();
+
+	wnd.printMessage( "FPS: " + std::to_string(1.0f / dt));
+
+
 	//LOOP
 	Mouse::Event e = wnd.mouse.Read();
 
@@ -42,16 +47,7 @@ void App::DoFrame() {
 	// draw
 	scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
 
-	//scenes[sceneIndex].drawDirect3D(&wnd.Gfx(), wnd.mouse, wnd.kbd);
-
-	//theScene.render(&wnd.GOpenGL(), wnd.mouse, wnd.kbd);
-
 	//theSceneD3d.render(wnd.Gfx(), wnd.mouse, wnd.kbd, timer, cam);
-
-	/*
-	theScene.drawScene(Scene::GRAPHIC_TYPE::OPENGL, wnd.GDIGfx(), wnd.Gfx(), wnd.GOpenGL(),
-		wnd.mouse, wnd.kbd, timer, cam);
-	*/
 }
 
 void App::populateScenes() {

@@ -15,7 +15,7 @@ public:
 
     PipelineD3D(GraphicsD3D& gfx, Microsoft::WRL::ComPtr<ID3D11Device> pDevice, bool isTexture);
 
-    Microsoft::WRL::ComPtr<ID3DBlob> pvsBC;
+    //Microsoft::WRL::ComPtr<ID3DBlob> pvsBC;
 
     Surface theSurface;
 

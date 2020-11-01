@@ -30,7 +30,5 @@ public:
 	int Go();
 private:
 	void DoFrame();
-
 	void populateScenes();
 };
-

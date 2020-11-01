@@ -57,11 +57,12 @@ public:
 	CustomWindow& operator=(const CustomWindow&) = delete;
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages();
+
 	GraphicsD3D& Gfx();
 	GraphicsGDI& GDIGfx();
 	GraphicsOpenGL& GOpenGL();
-
 	HDC getDeviceContext();
+	void printMessage(std::string theMessage);
 
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
