@@ -12,11 +12,12 @@ private:
 	CustomWindow wnd;
 	CustomTimer timer;
 
-	//used for theSceneD3d
-	CameraD3D cam;
+	SceneD3d* theSceneD3d;
 
-	SceneD3d theSceneD3d;
-
+	GraphicsGDI gCustom;
+	GraphicsOpenGL gOpenGL;
+	GraphicsD3D GD3d;
+	 
 	unsigned int graphicsIndex;
 	unsigned int sceneIndex;
 

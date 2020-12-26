@@ -49,7 +49,7 @@ SceneD3d::SceneD3d(GraphicsD3D& d3d) {
 }
 
 
-void SceneD3d::render(GraphicsD3D& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& theCam) {
+void SceneD3d::render(GraphicsD3D& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer) {
 	const auto dt = timer.Mark() * speed_factor;
 
 	d3d.BeginFrame(0.07f, 0.0f, 0.12f);

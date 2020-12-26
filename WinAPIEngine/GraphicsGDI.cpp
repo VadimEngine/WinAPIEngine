@@ -10,6 +10,9 @@ GraphicsGDI::GraphicsGDI(HWND hWnd)
 background_color(0xFFFFFF) {
     image = SOIL_load_image("Images\\font.png", &width, &height, 0, SOIL_LOAD_RGBA);
 
+    zBuffer = new float[640 * 480];
+
+    // TODO: Remove this
     charKeyMap.insert({ 'A', glm::vec2(0,0) });
     charKeyMap.insert({ 'B', glm::vec2(1,0) });
     charKeyMap.insert({ 'C', glm::vec2(2,0) });
@@ -80,7 +83,9 @@ background_color(0xFFFFFF) {
     charKeyMap.insert({ ':', glm::vec2(14,2) });
 }
 
-GraphicsGDI::~GraphicsGDI() {}
+GraphicsGDI::~GraphicsGDI() {
+    delete[] zBuffer;
+}
 
 void GraphicsGDI::renderFillRectangle(int x, int y, int width, int height) {
     for (unsigned int i = x; i < x + width; i++) {
@@ -99,6 +104,7 @@ void GraphicsGDI::startFrame() {
             //Stride is number of bytes needed to store one row of the bitmap
             int index = j * bitmapData.Stride / 4 + i;
             pRawBitmapOrig[index] = 0x000000;
+            zBuffer[index] = INT_MAX;
         }
     }
 }
@@ -115,6 +121,15 @@ void GraphicsGDI::setPixel(int x, int y, unsigned int color) {
     if (x >= 0 && x < 640 && y >= 0 && y < 480) {
         int index = y * bitmapData.Stride / 4 + x;
         pRawBitmapOrig[index] = color;
+    }
+}
+
+void GraphicsGDI::setPixel3D(int x, int y, int z, unsigned int color) {
+    if (x >= 0 && x < 640 && y >= 0 && y < 480 ) {
+        int index = y * bitmapData.Stride / 4 + x;
+        if (z >=0 && z < zBuffer[index]) {
+            pRawBitmapOrig[index] = color;
+        }
     }
 }
 
@@ -172,31 +187,31 @@ void GraphicsGDI::drawLine(Vec2 v0, Vec2 v1, unsigned int color) {
     }
 }
 
-void GraphicsGDI::drawTriangle(Vec2 v0,
-                               Vec2 v1,
-                               Vec2 v2,
+void GraphicsGDI::drawTriangle(Vec3 v0,
+                               Vec3 v1,
+                               Vec3 v2,
                                const unsigned int color) {
 
     if (!inbound(v0) || !inbound(v1) || !inbound(v2)) {
         return;
     }
 
-    Vec2* pv0 = &v0;
-    Vec2* pv1 = &v1;
-    Vec2* pv2 = &v2;
+    Vec3* pv0 = &v0;
+    Vec3* pv1 = &v1;
+    Vec3* pv2 = &v2;
 
     if (pv1->y < pv0->y) {
-        Vec2* temp = pv0;
+        Vec3* temp = pv0;
         pv0 = pv1;
         pv1 = temp;
     }
     if (pv2->y < pv1->y) {
-        Vec2* temp = pv1;
+        Vec3* temp = pv1;
         pv1 = pv2;
         pv2 = temp;
     }
     if (pv1->y < pv0->y) {
-        Vec2* temp = pv0;
+        Vec3* temp = pv0;
         pv0 = pv1;
         pv1 = temp;
     }
@@ -204,7 +219,7 @@ void GraphicsGDI::drawTriangle(Vec2 v0,
     if (pv0->y == pv1->y) { // natural flat top
         // sorting top vertices by x
         if (pv1->x < pv0->x) {
-            Vec2* temp = pv0;
+            Vec3* temp = pv0;
             pv0 = pv1;
             pv1 = temp;
         }
@@ -212,7 +227,7 @@ void GraphicsGDI::drawTriangle(Vec2 v0,
     } else if (pv1->y == pv2->y) { // natural flat bottom
      // sorting bottom vertices by x
         if (pv2->x < pv1->x) {
-            Vec2* temp = pv1;
+            Vec3* temp = pv1;
             pv1 = pv2;
             pv2 = temp;
         }
@@ -220,8 +235,9 @@ void GraphicsGDI::drawTriangle(Vec2 v0,
     } else {
         float alphaSplit = (pv1->y - pv0->y) / (pv2->y - pv0->y);
 
-        const Vec2 vi(pv0->x + (pv2->x - pv0->x) * alphaSplit,
-            pv0->y + (pv2->y - pv0->y) * alphaSplit);
+        const Vec3 vi(pv0->x + (pv2->x - pv0->x) * alphaSplit,
+                      pv0->y + (pv2->y - pv0->y) * alphaSplit,
+                      pv0->z + (pv2->z - pv0->z) * alphaSplit);
 
         if (pv1->x < vi.x) { // major right
             drawFlatBottomTriangle(*pv0, *pv1, vi, color);
@@ -235,7 +251,7 @@ void GraphicsGDI::drawTriangle(Vec2 v0,
 }
 
 
-void GraphicsGDI::drawFlatTopTriangle(const Vec2 v0, const Vec2 v1, const Vec2 v2, unsigned int color) {
+void GraphicsGDI::drawFlatTopTriangle(const Vec3 v0, const Vec3 v1, const Vec3 v2, unsigned int color) {
     const float m0 = (v2.x - v0.x) / (v2.y - v0.y);
     const float m1 = (v2.x - v1.x) / (v2.y - v1.y);
 
@@ -254,12 +270,13 @@ void GraphicsGDI::drawFlatTopTriangle(const Vec2 v0, const Vec2 v1, const Vec2 v
         const int xEnd = (int)ceil(px1 - 0.5f); // the pixel AFTER the last pixel drawn
 
         for (int x = xStart; x < xEnd; x++) {
-            setPixel(x, y, color);
+            float z = Calculator::zOnPlane(v0, v1, v2, x, y);
+            setPixel3D(x, y, z, color);
         }
     }
 }
 
-void GraphicsGDI::drawFlatBottomTriangle(const Vec2 v0, const Vec2 v1, const Vec2 v2, unsigned int color) {
+void GraphicsGDI::drawFlatBottomTriangle(const Vec3 v0, const Vec3 v1, const Vec3 v2, unsigned int color) {
     const float m0 = (v1.x - v0.x) / (v1.y - v0.y);
     const float m1 = (v2.x - v0.x) / (v2.y - v0.y);
 
@@ -278,7 +295,8 @@ void GraphicsGDI::drawFlatBottomTriangle(const Vec2 v0, const Vec2 v1, const Vec
         const int xEnd = (int)ceil(px1 - 0.5f); // the pixel AFTER the last pixel drawn
 
         for (int x = xStart; x < xEnd; x++) {
-            setPixel(x, y, color);
+            float z = Calculator::zOnPlane(v0, v1, v2, x, y);
+            setPixel3D(x, y, z, color);
         }
     }
 }
@@ -351,9 +369,7 @@ void GraphicsGDI::drawScene(Keyboard& kbd) {
                               Vec2(250, 50), 0xEE7700);
     */
 
-    drawTriangle(Vec2(c1.x, c1.y),
-        Vec2(c2.x, c2.y),
-        Vec2(c3.x, c3.y), 0xEE7733);
+    drawTriangle(c1,c2,c3, 0xEE7733);
 
     //drawLine(Vec2(0, 0),
     //    Vec2(wnd.mouse.GetPosX(), wnd.mouse.GetPosY()), 0x00FF00);

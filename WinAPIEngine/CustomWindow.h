@@ -41,12 +41,13 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	/*
 	std::unique_ptr<GraphicsD3D> pGfx;
 	//GDIgraphics
 	std::unique_ptr<GraphicsGDI> pGDI;
 	//opengl
 	std::unique_ptr<GraphicsOpenGL> pGOpenGL;
-
+	*/
 public:
 	Keyboard kbd;
 	Mouse mouse;
@@ -57,11 +58,14 @@ public:
 	CustomWindow& operator=(const CustomWindow&) = delete;
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages();
-
+	/*
 	GraphicsD3D& Gfx();
 	GraphicsGDI& GDIGfx();
 	GraphicsOpenGL& GOpenGL();
+	*/
+
 	HDC getDeviceContext();
+	HWND getHWND();
 	void printMessage(std::string theMessage);
 
 private:

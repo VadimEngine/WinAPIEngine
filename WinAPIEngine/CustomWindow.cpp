@@ -69,13 +69,14 @@ CustomWindow::CustomWindow(int width, int height, const char* name)
     );
     // show window
     ShowWindow(hWnd, SW_SHOWDEFAULT);
-    pGfx = std::make_unique<GraphicsD3D>(hWnd);
+
+    //pGfx = std::make_unique<GraphicsD3D>(hWnd);
 
     // Init ImGui Win32 Impl
     ImGui_ImplWin32_Init(hWnd);
 
-    pGDI = std::make_unique<GraphicsGDI>(hWnd);
-    pGOpenGL = std::make_unique<GraphicsOpenGL>(hWnd);
+    //pGDI = std::make_unique<GraphicsGDI>(hWnd);
+    //pGOpenGL = std::make_unique<GraphicsOpenGL>(hWnd);
 }
 
 CustomWindow::~CustomWindow() {
@@ -91,7 +92,7 @@ std::optional<int> CustomWindow::ProcessMessages() {
     MSG msg;
     // while queue has messages, remove and dispatch them (but do not block on empty queue)
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-        // check for quit because peekmessage does not signal this via return val
+        // check for quit because peekMessage does not signal this via return val
         if (msg.message == WM_QUIT) {
             // return optional wrapping int (arg to PostQuitMessage is in wparam) signals quit
             return msg.wParam;
@@ -105,6 +106,7 @@ std::optional<int> CustomWindow::ProcessMessages() {
     return {};
 }
 
+/*
 GraphicsD3D& CustomWindow::Gfx() {
     return *pGfx;
 }
@@ -116,6 +118,8 @@ GraphicsGDI& CustomWindow::GDIGfx() {
 GraphicsOpenGL& CustomWindow::GOpenGL() {
     return *pGOpenGL;
 }
+*/
+
 //Call back function
 
 LRESULT CALLBACK CustomWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -166,7 +170,7 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_PAINT: {
             break;
         }
-        // clear keystate when window loses focus to prevent input getting "stuck"
+        // clear key state when window loses focus to prevent input getting "stuck"
         case WM_KILLFOCUS:
             kbd.ClearState();
             break;
@@ -288,6 +292,11 @@ LRESULT CustomWindow::HandleMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
+
+HWND CustomWindow::getHWND() {
+    return hWnd;
+}
+
 
 void CustomWindow::printMessage(std::string theMessage) {
     std::stringstream ss;

@@ -2,8 +2,7 @@ cbuffer CBuf {
 	matrix transform;
 };
 
-struct VSOut
-{
+struct VSOut {
 	float4 color : Color;
 	float4 pos : SV_Position;
 };

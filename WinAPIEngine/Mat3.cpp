@@ -42,6 +42,42 @@ Mat3 Mat3::RotationX(float theta) {
 	};
 }
 
+
+
+
+Mat3 Mat3::RotationX3(float theta) {
+	const float sinTheta = sin(theta);
+	const float cosTheta = cos(theta);
+	return{
+		cosTheta, -sinTheta, 0.0f,
+		sinTheta, cosTheta, 0.0f,
+		0.0f, 0.0f, 1.0f,
+	};
+}
+
+Mat3 Mat3::RotationY3(float theta) {
+	const float sinTheta = sin(theta);
+	const float cosTheta = cos(theta);
+	return{
+		1.0f, 0.0f, 0.0f,
+		0.0f, cosTheta, sinTheta,
+		0.0f,-sinTheta, cosTheta,
+	};
+}
+
+Mat3 Mat3::RotationZ3(float theta) {
+	const float sinTheta = sin(theta);
+	const float cosTheta = cos(theta);
+	return{
+		cosTheta, 0.0f, -sinTheta,
+		0.0f, 1.0f, 0.0f,
+		sinTheta, 0, cosTheta,
+	};
+}
+
+
+
+
 Vec3 Mat3::mutltply(Vec3 m1, Mat3 m2) {
 	Vec3 result(0, 0, 0);
 	result.x = m1.x * m2.elements[0][0] + m1.y * m2.elements[1][0] + m1.z * m2.elements[2][0];

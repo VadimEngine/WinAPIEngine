@@ -109,6 +109,7 @@ GraphicsD3D::GraphicsD3D(HWND hWnd)
 }
 
 void GraphicsD3D::buildCharMap() {
+	// TODO: Remove this
 	charKeyMap.insert({ 'A', {0,0} });
 	charKeyMap.insert({ 'B', {1,0} });
 	charKeyMap.insert({ 'C', {2,0} });
@@ -254,7 +255,7 @@ void GraphicsD3D::drawMesh(RenderableMesh& theMesh) {
 		theVertices.push_back(theMesh.vertices[i].x);
 		theVertices.push_back(theMesh.vertices[i].y);
 		theVertices.push_back(theMesh.vertices[i].z);
-		//add color...
+		//add color
 		int theColor = theMesh.color;
 		int red = (theColor >> 16) & 0x000000FF;
 		int green = (theColor >> 8) & 0x000000FF;
@@ -299,9 +300,10 @@ void GraphicsD3D::drawFrame() {
 		float g = theVertices[i + 4];
 		float b = theVertices[i + 5];
 
+		int theIndex = i / 6;
 
-		vertices2[i/6] = { x, y, -z,
-						   r, g, b, 1 };
+		vertices2[theIndex] = { x, y, -z,
+								r, g, b, 1 };
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -310,7 +312,7 @@ void GraphicsD3D::drawFrame() {
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.CPUAccessFlags = 0u;
 	bd.MiscFlags = 0u;
-	bd.ByteWidth = theVertices.size() * sizeof(float);
+	bd.ByteWidth = ((theVertices.size()* 7) / 6) * sizeof(float);
 	bd.StructureByteStride = sizeof(Vertex);
 	D3D11_SUBRESOURCE_DATA sd = {};
 	sd.pSysMem = vertices2;//vertices.data();
@@ -325,6 +327,7 @@ void GraphicsD3D::drawFrame() {
 	unsigned short* indices = new unsigned short[theIndices.size()];
 	for (unsigned int i = 0; i < theIndices.size(); i++) {
 		indices[theIndices.size() - 1 - i] = theIndices[i];
+		//indices[i] = theIndices[i];
 	}
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
@@ -376,12 +379,12 @@ void GraphicsD3D::drawFrame() {
 
 	// bind constant buffer to vertex shader
 	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
-
 							
 	pContext->DrawIndexed((UINT)theIndices.size(), 0u, 0u);
 
 	delete[] vertices2;
 	delete[] indices;
+
 	EndFrame();
 }
 
@@ -472,7 +475,6 @@ void GraphicsD3D::drawImage() {
 	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
 	//create index buffer
-	//const unsigned short indices[] = { 0,1,2, 3, 0,2 };
 	unsigned short* indices = new unsigned short[imageIndices.size()];
 	for (unsigned int i = 0; i < imageIndices.size(); i++) {
 		indices[i] = imageIndices[i];

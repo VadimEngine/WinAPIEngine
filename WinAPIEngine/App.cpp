@@ -1,10 +1,12 @@
 #include "App.h"
 
 App::App()
-	: wnd(640, 480, "Custom Window"), theSceneD3d(wnd.Gfx()){
-	graphics.push_back(&wnd.GDIGfx());	// custom
-	graphics.push_back(&wnd.GOpenGL());	// openGL
-	graphics.push_back(&wnd.Gfx());		// direct 3d
+	: wnd(640, 480, "Custom Window"), gCustom(wnd.getHWND()), gOpenGL(wnd.getHWND()), GD3d(wnd.getHWND()){
+	graphics.push_back(&gCustom);
+	graphics.push_back(&gOpenGL);
+	graphics.push_back(&GD3d);
+
+	theSceneD3d = new SceneD3d(GD3d);
 
 	graphicsIndex = 0;
 
@@ -13,7 +15,9 @@ App::App()
 	sceneIndex = 0;
 }
 
-App::~App(){}
+App::~App(){
+	delete theSceneD3d;
+}
 
 int App::Go() {
 	while (true) {
@@ -31,7 +35,6 @@ void App::DoFrame() {
 
 	wnd.printMessage( "FPS: " + std::to_string(1.0f / dt));
 
-
 	//LOOP
 	Mouse::Event e = wnd.mouse.Read();
 
@@ -43,11 +46,11 @@ void App::DoFrame() {
 		sceneIndex = (sceneIndex + 1) % scenes.size();
 	}
 	// update
-	scenes[sceneIndex].update(1.0f, wnd.mouse, wnd.kbd);
+	scenes[sceneIndex].update(dt, wnd.mouse, wnd.kbd);
 	// draw
 	scenes[sceneIndex].render(graphics[graphicsIndex], wnd.mouse, wnd.kbd);
-
-	//theSceneD3d.render(wnd.Gfx(), wnd.mouse, wnd.kbd, timer, cam);
+	// if drawing this scene then set dt to bee tiemr.peek
+	//theSceneD3d->render(GD3d, wnd.mouse, wnd.kbd, timer);
 }
 
 void App::populateScenes() {

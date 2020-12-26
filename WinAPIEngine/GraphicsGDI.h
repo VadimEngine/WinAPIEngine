@@ -34,11 +34,12 @@ private:
 
 	unsigned char* image;
 	int width, height;
+	float* zBuffer;
+
 	//this should be static
 	std::unordered_map<char, glm::vec2> charKeyMap;
 
 public:
-
 	//Add normalized(-1 to 1 coords)/denormalized(exact pixel coords) drawing method
 	GraphicsGDI(HWND hWnd);
 	GraphicsGDI(const GraphicsGDI&) = delete;
@@ -55,9 +56,10 @@ public:
 	void DrawFrame();
 
 	void setPixel(int x, int y, unsigned int color);
+	void setPixel3D(int x, int y, int z, unsigned int color);
 	void drawLine(Vec2 v1, Vec2 v2, unsigned int color);
 
-	void drawTriangle(Vec2 v1, Vec2 v2,  Vec2 v3, const unsigned int color);
+	void drawTriangle(Vec3 v1, Vec3 v2, Vec3 v3, const unsigned int color);
 
 	void drawScene(Keyboard& kbd);
 
@@ -70,12 +72,9 @@ public:
 	void renderSubImage(float x, float y, float subX, 
 						float subY, float subWidth,
 						float subHeight, unsigned char* theImage);
-
-
-
 private:
-	void drawFlatTopTriangle(const Vec2 v1, const Vec2 v2, const Vec2 v3, unsigned int color);
-	void drawFlatBottomTriangle(const Vec2 v1, const Vec2 v2, const Vec2 v3, unsigned int color);
+	void drawFlatTopTriangle(const Vec3 v1, const Vec3 v2, const Vec3 v3, unsigned int color);
+	void drawFlatBottomTriangle(const Vec3 v1, const Vec3 v2, const Vec3 v3, unsigned int color);
 	bool inbound(const int x, const int y);
 	bool inbound(const Vec2 theVec);
 };

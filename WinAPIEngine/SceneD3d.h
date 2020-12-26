@@ -38,10 +38,10 @@ public:
     std::vector<std::unique_ptr<class Drawable>> drawables;
     static constexpr size_t nDrawables = 180;
     float speed_factor = 1.0f;
-
+    CameraD3D theCam;
 
     SceneD3d(GraphicsD3D& d3d);
 
     //keep camera inside the Scene
-    void render(GraphicsD3D& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer, CameraD3D& theCam);
+    void render(GraphicsD3D& d3d, Mouse& mouse, Keyboard& keyboard, CustomTimer& timer);
 };

@@ -38,6 +38,7 @@ GraphicsOpenGL::GraphicsOpenGL(HWND hWnd) {
 
 
 	image = SOIL_load_image("Images\\font.png", &width, &height, 0, SOIL_LOAD_RGBA);
+	// TODO: Remove this
 	charKeyMap.insert({ 'A', glm::vec2(0,0) });
 	charKeyMap.insert({ 'B', glm::vec2(1,0) });
 	charKeyMap.insert({ 'C', glm::vec2(2,0) });
@@ -434,7 +435,6 @@ void GraphicsOpenGL::drawMesh(RenderableMesh& theMesh) {
 		theVertices.push_back(theMesh.vertices[i].y);
 		theVertices.push_back(theMesh.vertices[i].z);
 		//add color
-		//int theColor = inputMesh.color;
 		int theColor = theMesh.color;
 		int red = (theColor >> 16) & 0x000000FF;
 		int green = (theColor >> 8) & 0x000000FF;

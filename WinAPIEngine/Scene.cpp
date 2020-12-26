@@ -45,7 +45,7 @@ void Scene::update(float dt, Mouse& mouse, Keyboard& keyboard) {
 	//poll events from mouse and keyboard
 
 	float dTheta = 1;
-	dt = 1.0f / 60.0f;
+	//dt = 1.0f / 60.0f;
 	GLfloat cameraSpeed = 5.0f * 0.01;
 
 	if (keyboard.KeyIsPressed('W')) {
@@ -53,7 +53,8 @@ void Scene::update(float dt, Mouse& mouse, Keyboard& keyboard) {
 		theCamera.cameraPos += cameraSpeed * theCamera.cameraFront;
 	}
 	if (keyboard.KeyIsPressed('A')) {
-		theCamera.pos.x -= dTheta * dt;
+		//theCamera.pos.x -= dTheta * dt;
+		theCamera.moveLeft(dt);
 		theCamera.cameraPos -= glm::normalize(glm::cross(theCamera.cameraFront, theCamera.cameraUp)) * cameraSpeed;
 	}
 	if (keyboard.KeyIsPressed('S')) {
@@ -62,28 +63,43 @@ void Scene::update(float dt, Mouse& mouse, Keyboard& keyboard) {
 
 	}
 	if (keyboard.KeyIsPressed('D')) {
-		theCamera.pos.x += dTheta * dt;
+		//theCamera.pos.x += dTheta * dt;
+		theCamera.moveRight(dt);
+		
 		theCamera.cameraPos += glm::normalize(glm::cross(theCamera.cameraFront, theCamera.cameraUp)) * cameraSpeed;
 	}
 
 	if (keyboard.KeyIsPressed(VK_LEFT)) {
-		theCamera.dir.y += dTheta * dt;
+		theCamera.rotateLeft(dt);
+		//theCamera.dir.y += dTheta * dt;
 	}
 	if (keyboard.KeyIsPressed(VK_RIGHT)) {
-		theCamera.dir.y -= dTheta * dt;
+		theCamera.rotateRight(dt);
+		//theCamera.dir.y -= dTheta * dt;
 	}
 	if (keyboard.KeyIsPressed(VK_UP)) {
-		theCamera.dir.x -= dTheta * dt;
+		theCamera.rotateUp(dt);
+		//theCamera.dir.x -= dTheta * dt;
 	}
 	if (keyboard.KeyIsPressed(VK_DOWN)) {
-		theCamera.dir.x += dTheta * dt;
+		theCamera.rotateDown(dt);
+		//theCamera.dir.x += dTheta * dt;
 	}
 	if (keyboard.KeyIsPressed('Q')) {
-		theCamera.dir.z += dTheta * dt;
+		theCamera.rotateCounterClockwise(dt);
 	}
 	if (keyboard.KeyIsPressed('E')) {
-		theCamera.dir.z -= dTheta * dt;
+		theCamera.rotateClockwise(dt);
 	}
+
+	if (keyboard.KeyIsPressed(VK_SPACE)) {
+		theCamera.moveUp(dt);
+	}
+
+	if (keyboard.KeyIsPressed(VK_SHIFT)) {
+		theCamera.moveDown(dt);
+	}
+
 }
 
 void Scene::render(AbstractGraphics* theGraphics, Mouse& mouse, Keyboard& keyboard) {
